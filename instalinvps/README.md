@@ -77,8 +77,24 @@ Semua fitur berikut tergabung dalam **1 URL / 1 Script** tanpa perlu install ter
 9. **♻️ Restore Panel dari Backup**:
    - Memulihkan panel secara utuh dari file lokal maupun tautan URL download.
 
-10. **🗑️ Uninstall / Restore Panel Asli**:
-   - Menghapus seluruh modifikasi dan mengembalikan file Blade serta Route Pterodactyl ke kondisi semula dari backup secara bersih.
+10. **�️ Proteksi Anti-Rusuh Pterodactyl (Integrasi AllxdDev-Hosting/antirusuh)**:
+   - **1-Click Full Protect (Semua 11 Modul Sekaligus)** atau **Modular (Pilih Satuan)**:
+     - **Modul 1**: Anti Delete Server (`ServerDeletionService.php`) — Mengunci penghapusan server hanya untuk Admin User ID 1.
+     - **Modul 2**: Anti Hapus & Ubah Data User (`UserController.php`) — Mencegah hacker/admin nakal mengubah email, password, root admin, atau menghapus user.
+     - **Modul 3**: Anti Akses & Hapus Location (`LocationController.php`) — Melindungi lokasi node dari intipan & penghapusan.
+     - **Modul 4 & 11**: Anti Akses, Ubah & Hapus Nodes (`NodeController.php` & `NodesController.php`) — Melindungi konfigurasi node server.
+     - **Modul 5**: Anti Akses & Ubah Nest/Egg (`NestController.php`) — Mengamankan konfigurasi egg dan nest.
+     - **Modul 6**: Anti Akses Settings Panel (`IndexController.php`) — Mengunci menu pengaturan panel agar tidak bisa diubah sembarangan.
+     - **Modul 7 & 8**: Proteksi Client File & Server API Controller — Melindungi akses file dan kontrol server dari sisi Client API.
+     - **Modul 9**: Anti Modifikasi Detail Server (`DetailsModificationService.php`) — Mengunci perubahan nama dan rincian server hanya untuk Admin ID 1.
+     - **Modul 10**: Floating Welcome Notification (`core.blade.php`) — Notifikasi sambutan modern di dashboard.
+   - Dilengkapi sistem auto-backup ke `/var/ptero_antirusuh_backups/` dan pembersihan cache otomatis (`artisan optimize:clear`).
+
+11. **🔄 Copot / Restore File Proteksi Anti-Rusuh**:
+   - Mengembalikan seluruh berkas proteksi ke file asli Pterodactyl secara bersih tanpa merusak data panel.
+
+12. **🗑️ Uninstall / Restore Panel Asli (Cabut PLTC)**:
+   - Menghapus seluruh modifikasi PLTC dan mengembalikan file Blade serta Route Pterodactyl ke kondisi semula secara bersih.
 
 ---
 

@@ -171,7 +171,9 @@ curl -sSL https://raw.githubusercontent.com/AllxdDev-Hosting/pterodactyl-remote-
 > 3. **Ganti / Ubah Domain Panel** (Tanpa reinstall, otomatis update Nginx, SSL Certbot, & Wings).
 > 4. **Migrasi VPS (Pindah VPS)** (Export/Import database & file panel utuh tanpa hapus data).
 > 5. **Backup & Restore Lengkap** (Database SQL + File panel terarsip aman).
-> 6. **Uninstall & Restore Panel Asli**.
+> 6. **🛡️ Proteksi Anti-Rusuh Pterodactyl (Full 1-Click & Modular)** (Anti Delete Server, Anti Hapus User, Anti Ubah Node/Nest/Settings, & Client API Protection).
+> 7. **🔄 Copot / Restore Proteksi Anti-Rusuh** (Mengembalikan ke file asli Pterodactyl kapan saja).
+> 8. **Uninstall & Restore Panel Asli (Cabut PLTC)**.
 
 ---
 

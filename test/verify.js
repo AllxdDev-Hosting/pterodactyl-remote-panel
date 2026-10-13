@@ -116,4 +116,16 @@ test('serverless export, config validation and frontend syntax', () => {
   for (const file of ['lib/mockDaemon.js', 'lib/wingsBridge.js', 'public/js/admin.js', 'public/cafeblend.html']) assert(!fs.existsSync(path.join(__dirname, '..', file)), file);
   const config = JSON.parse(fs.readFileSync(path.join(__dirname, '../vercel.json')));
   assert.equal(config.routes[0].dest, '/api/index.js');
+
+  const installerSh = fs.readFileSync(path.join(__dirname, '../instalinvps/installer.sh'), 'utf8');
+  assert.match(installerSh, /AllxdClint/);
+  assert.match(installerSh, /antirusuh_menu/);
+  assert.match(installerSh, /install_all_antirusuh/);
+  assert.match(installerSh, /uninstall_all_antirusuh/);
+  assert.match(installerSh, /ServerDeletionService\.php/);
+  assert.match(installerSh, /UserController\.php/);
+  assert.match(installerSh, /LocationController\.php/);
+  assert.match(installerSh, /NodesController\.php/);
+  assert.match(installerSh, /NestController\.php/);
+  assert.match(installerSh, /FileController\.php/);
 });
