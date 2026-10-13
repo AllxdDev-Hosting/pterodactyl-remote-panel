@@ -96,8 +96,12 @@ class DatabaseController {
             <div>Password:</div>
             <div class="flex items-center gap-2">
               <input type="password" readonly value="${password}" id="db-pass-${db.id}" class="form-input" style="padding: 0.2rem 0.4rem; font-size: 0.75rem; height: auto;">
-              <button class="btn btn-sm btn-ghost" onclick="window.databaseManager.togglePassword('${db.id}')">👁</button>
-              <button class="btn btn-sm btn-ghost" onclick="window.databaseManager.copyPassword('${password}')">📋</button>
+              <button class="btn btn-sm btn-ghost" onclick="window.databaseManager.togglePassword('${db.id}')" title="Toggle visibility">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+              <button class="btn btn-sm btn-ghost" onclick="window.databaseManager.copyPassword('${password}')" title="Copy password">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
             </div>
           </div>
 
@@ -128,7 +132,7 @@ class DatabaseController {
   }
 
   async promptCreate() {
-    const name = prompt('Enter database name (e.g. s1_data):');
+    const name = await (window.dialog ? window.dialog.prompt('Enter database name (e.g. s1_data):', '', 'Create Database') : prompt('Enter database name (e.g. s1_data):'));
     if (!name || !name.trim()) return;
 
     try {
@@ -141,7 +145,8 @@ class DatabaseController {
   }
 
   async rotatePassword(id) {
-    if (!confirm('Are you sure you want to rotate this database password? Any active connection will need updating.')) return;
+    const confirmed = await (window.dialog ? window.dialog.confirm('Are you sure you want to rotate this database password? Any active connection will need updating.', 'Rotate Password') : confirm('Are you sure you want to rotate this database password? Any active connection will need updating.'));
+    if (!confirmed) return;
 
     try {
       await this.api.rotateDatabasePassword(this.currentServerId, id);
@@ -153,7 +158,8 @@ class DatabaseController {
   }
 
   async deleteDb(id) {
-    if (!confirm('Are you sure you want to permanently delete this database? All data will be lost.')) return;
+    const confirmed = await (window.dialog ? window.dialog.confirm('Are you sure you want to permanently delete this database? All data will be lost.', 'Delete Database', true) : confirm('Are you sure you want to permanently delete this database? All data will be lost.'));
+    if (!confirmed) return;
 
     try {
       await this.api.deleteDatabase(this.currentServerId, id);

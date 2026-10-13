@@ -3,132 +3,300 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pterodactyl Remote Controller | Wings Terminal & Live Management</title>
+  <title>Pterodactyl Panel | Remote Wings & Management</title>
   
-  <!-- Favicon icon SVG -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2306b6d4'><polygon points='12 2 2 7 12 12 22 7 12 2'/><polyline points='2 17 12 22 22 17'/><polyline points='2 12 12 17 22 12'/></svg>">
+  <!-- Pterodactyl Icon SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='1111 4680 130 120' fill='%231e88e5'%3E%3Cpath d='M 1153.300781 4732.21875 C 1153.179688 4734.238281 1151.378906 4735.730469 1149.371094 4735.480469 L 1146.621094 4735.128906 L 1153.441406 4729.921875 Z M 1237.460938 4684.519531 L 1192.5 4705.878906 L 1175.949219 4744.699219 L 1168.179688 4741.171875 L 1180.960938 4711.328125 L 1150.378906 4725.78125 L 1115 4754.519531 L 1152.21875 4744.488281 L 1160.941406 4771.191406 L 1228.769531 4795.480469 L 1198.730469 4768.601562 Z M 1237.460938 4684.519531'/%3E%3C/svg%3E">
+
+  <!-- Google Fonts: DM Serif Display, Work Sans, IBM Plex Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
   <!-- xterm.js stylesheet -->
   <link rel="stylesheet" href="css/xterm.css">
   
-  <!-- Custom Cyber Theme stylesheet -->
+  <!-- Pterodactyl Theme stylesheet -->
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css?v=2">
 </head>
 <body>
 
-  <!-- App Header -->
-  <header class="app-header">
-    <div class="brand flex items-center gap-3">
-      <div class="brand-logo flex items-center justify-center">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-          <polyline points="2 17 12 22 22 17"/>
-          <polyline points="2 12 12 17 22 12"/>
-        </svg>
-      </div>
-      <div>
-        <div class="brand-title">PTERODACTYL REMOTE</div>
-        <div class="brand-subtitle">Standalone Wings & Client Control Panel</div>
+  <!-- =========================================================================
+       AUTHENTIC TOP NAVBAR (Shown when authenticated)
+       ========================================================================= -->
+  <header id="app-navbar" class="pt-navbar hidden">
+    <div class="flex items-center gap-4">
+      <div id="brand-link" class="pt-brand" style="cursor: pointer;">
+        <div class="pt-brand-logo" title="Pterodactyl">
+          <svg width="24" height="24" viewBox="1111 4680 130 120" fill="currentColor">
+            <path d="M 1153.300781 4732.21875 C 1153.179688 4734.238281 1151.378906 4735.730469 1149.371094 4735.480469 L 1146.621094 4735.128906 L 1153.441406 4729.921875 Z M 1237.460938 4684.519531 L 1192.5 4705.878906 L 1175.949219 4744.699219 L 1168.179688 4741.171875 L 1180.960938 4711.328125 L 1150.378906 4725.78125 L 1115 4754.519531 L 1152.21875 4744.488281 L 1160.941406 4771.191406 L 1228.769531 4795.480469 L 1198.730469 4768.601562 Z M 1237.460938 4684.519531"/>
+          </svg>
+        </div>
+        <div>
+          <div class="pt-brand-title">PTERODACTYL</div>
+          <div class="pt-brand-sub">Client Control</div>
+        </div>
       </div>
     </div>
 
-    <!-- Server Selector & Mode Indicator -->
-    <div class="header-controls flex items-center gap-3">
-      <span id="header-mode-badge" class="badge badge-warning">DEMO SIMULATOR</span>
-      <span id="ws-connection-status" class="badge badge-warning text-xs">Daemon: Connecting...</span>
+    <!-- Center Search on Server List -->
+    <div id="header-search-wrap" class="flex items-center">
+      <input type="text" id="server-search-input" class="pt-search-input" placeholder="Search servers by name or egg...">
+    </div>
 
-      <div class="server-select-wrap">
-        <select id="server-select" class="form-input" style="min-width: 230px; font-weight: 500;">
-          <option value="">Loading servers...</option>
-        </select>
-      </div>
-
-      <button id="btn-open-settings" class="btn btn-outline flex items-center gap-2" title="Panel API Settings">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <!-- Right Controls -->
+    <div class="pt-nav-controls">
+      <!-- Admin Area Button (Visible for Admin role only) -->
+      <button id="btn-open-admin" class="pt-btn-admin-gear" style="display: none;" title="Go to Pterodactyl Administration">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="3"/>
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
         </svg>
-        <span>Settings</span>
+        <span>Administration</span>
       </button>
+
+      <!-- User Profile Menu (Top Right) -->
+      <div id="user-menu-wrap" class="user-menu-wrap">
+        <button id="nav-user-btn" class="pt-user-badge" type="button" aria-expanded="false" aria-haspopup="true">
+          <img id="nav-user-avatar" src="https://api.dicebear.com/7.x/identicon/svg?seed=admin" class="pt-user-avatar" alt="User">
+          <div class="user-badge-text flex flex-col text-left">
+            <span id="nav-user-name" class="font-bold text-xs text-white">admin</span>
+            <span id="nav-user-role" class="text-xs text-muted">Client</span>
+          </div>
+          <svg class="user-menu-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+        <!-- Dropdown Menu (Opens on click) -->
+        <div id="user-dropdown-menu" class="user-dropdown-menu" style="display: none;">
+          <div class="user-dropdown-header">
+            <div id="dropdown-user-name" class="font-bold text-sm text-white">admin</div>
+            <div id="dropdown-user-role" class="text-xs text-muted">Client Account</div>
+          </div>
+          <div class="user-dropdown-divider"></div>
+          <button id="btn-open-settings" class="user-dropdown-item" type="button">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <span>Account / Panel Settings</span>
+          </button>
+          <div class="user-dropdown-divider"></div>
+          <button id="btn-logout" class="user-dropdown-item text-danger" type="button">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Log Out</span>
+          </button>
+        </div>
+      </div>
     </div>
   </header>
 
-  <!-- Sticky Server Action & Power Bar -->
-  <section class="server-bar">
-    <div class="server-info-col">
+  <!-- =========================================================================
+       VIEW 1: AUTHENTIC PTERODACTYL LOGIN SCREEN
+       ========================================================================= -->
+  <main id="view-login" class="app-view login-view-container active">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="login-logo" title="Pterodactyl">
+          <svg width="36" height="36" viewBox="1111 4680 130 120" fill="currentColor">
+            <path d="M 1153.300781 4732.21875 C 1153.179688 4734.238281 1151.378906 4735.730469 1149.371094 4735.480469 L 1146.621094 4735.128906 L 1153.441406 4729.921875 Z M 1237.460938 4684.519531 L 1192.5 4705.878906 L 1175.949219 4744.699219 L 1168.179688 4741.171875 L 1180.960938 4711.328125 L 1150.378906 4725.78125 L 1115 4754.519531 L 1152.21875 4744.488281 L 1160.941406 4771.191406 L 1228.769531 4795.480469 L 1198.730469 4768.601562 Z M 1237.460938 4684.519531"/>
+          </svg>
+        </div>
+        <h1 class="login-title">Login to Continue</h1>
+        <p class="login-subtitle">Pterodactyl Remote Server Management Dashboard</p>
+        <span class="login-badge-author">by AllxdDev</span>
+      </div>
+
+      <p class="text-sm text-muted mb-3">Use your personal Pterodactyl Client API key. Username/password login is unsupported because the Client API does not provide password authentication. The upstream panel is fixed by the deployment administrator.</p>
+      <p class="text-xs text-muted mb-3">Global Application API administration is unavailable here. Use the original panel for global users, nodes and server administration.</p>
+      <form id="form-login-remote" class="flex flex-col gap-3">
+
+        <div class="form-group">
+          <label class="form-label" for="login-panel-key">Client API Key</label>
+          <input type="password" id="login-panel-key" class="form-input" placeholder="Personal Client API key" autocomplete="off" required maxlength="1024">
+          <span class="text-xs text-muted">Generate in Panel → Account Settings → API Credentials</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full mt-2" style="padding: 0.75rem;">
+          Connect Remote Panel
+        </button>
+      </form>
+
+      <div id="login-error" class="text-danger text-xs text-center font-bold" style="display: none;"></div>
+
+      <div class="login-footer">
+        <p class="text-xs text-muted text-center mt-4">Copyright &copy; AllxdDev &bull; All Rights Reserved</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       VIEW 2: USER DASHBOARD (PTERODACTYL SERVER LIST)
+       ========================================================================= -->
+  <main id="view-servers" class="app-view server-list-view">
+    <div class="server-list-header">
+      <div class="server-list-title">
+        <h2 id="server-list-heading">Your Servers</h2>
+        <p id="server-list-count" class="text-muted">Showing 0 servers you have access to.</p>
+      </div>
+
+      <!-- Filter Controls -->
       <div class="flex items-center gap-2">
-        <span id="server-state-dot" class="status-dot dot-offline"></span>
-        <h1 id="current-server-name" class="server-name">Select a server</h1>
-        <span id="server-state-badge" class="badge badge-offline">OFFLINE</span>
-      </div>
-      <div class="server-meta flex items-center gap-3 text-xs text-muted">
-        <span>Identifier: <b id="current-server-id" class="font-mono text-cyan">---</b></span>
-        <span>•</span>
-        <span>Node: <b id="current-server-node" class="text-white">---</b></span>
-        <span>•</span>
-        <span>Uptime: <b id="server-uptime" class="font-mono text-white">0s</b></span>
+        <button class="btn btn-sm btn-outline active" data-filter="all">All Servers</button>
+        <button class="btn btn-sm btn-outline" data-filter="running">Running</button>
+        <button class="btn btn-sm btn-outline" data-filter="offline">Offline</button>
+        <button class="btn btn-sm btn-ghost" id="btn-refresh-servers" title="Refresh List">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"/>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+        </button>
       </div>
     </div>
 
-    <!-- Power Actions -->
-    <div class="power-controls flex items-center gap-2">
-      <button class="btn btn-power-start" data-power-action="start" title="Start Server">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        <span>Start</span>
-      </button>
-
-      <button class="btn btn-power-restart" data-power-action="restart" title="Restart Server">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-        <span>Restart</span>
-      </button>
-
-      <button class="btn btn-power-stop" data-power-action="stop" title="Graceful Stop">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
-        <span>Stop</span>
-      </button>
-
-      <button class="btn btn-power-kill" data-power-action="kill" title="Force Kill / Terminate">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        <span>Kill</span>
-      </button>
+    <!-- Cards Grid matching Pterodactyl -->
+    <div id="servers-cards-grid" class="server-cards-grid">
+      <!-- Dynamically populated server cards -->
+      <div class="card p-8 text-center text-muted" style="grid-column: 1 / -1;">
+        Loading your servers...
+      </div>
     </div>
-  </section>
 
-  <!-- Navigation Tabs -->
-  <nav class="nav-tabs-bar">
-    <button class="nav-tab active" data-tab="console">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-      <span>Live Terminal</span>
-    </button>
-    <button class="nav-tab" data-tab="monitoring">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      <span>Live Monitoring</span>
-    </button>
-    <button class="nav-tab" data-tab="files">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-      <span>File Manager</span>
-    </button>
-    <button class="nav-tab" data-tab="databases">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-      <span>Databases</span>
-    </button>
-    <button class="nav-tab" data-tab="backups">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
-      <span>Backups</span>
-    </button>
-    <button class="nav-tab" data-tab="schedules">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      <span>Schedules</span>
-    </button>
-  </nav>
+    <footer class="pt-footer">
+      <span>Copyright &copy; AllxdDev &bull; Pterodactyl Remote Panel</span>
+    </footer>
+  </main>
 
-  <!-- Main Content Container -->
+  <!-- =========================================================================
+       VIEW 3: SERVER MANAGEMENT VIEW (CONSOLE & CONTROLS - 100% PTERODACTYL)
+       ========================================================================= -->
+  <div id="view-server" class="app-view">
+    <!-- Sticky Server Hero Bar with Power Actions -->
+    <section class="server-bar">
+      <div class="server-info-col">
+        <div class="flex items-center gap-2">
+          <span id="server-state-dot" class="status-dot dot-offline"></span>
+          <h1 id="current-server-name" class="server-name">Select a server</h1>
+          <span id="server-state-badge" class="badge badge-offline">OFFLINE</span>
+        </div>
+        <div class="server-meta flex items-center gap-3 text-xs text-muted">
+          <span>Identifier: <b id="current-server-id" class="font-mono text-cyan">---</b></span>
+          <span id="ws-connection-status" class="badge badge-warning text-xs">Daemon: Connecting...</span>
+        </div>
+      </div>
+
+      <!-- Power Controls -->
+      <div class="power-controls flex items-center gap-2">
+        <button class="btn btn-power-start" data-power-action="start" title="Start Server">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Start</span>
+        </button>
+
+        <button class="btn btn-power-restart" data-power-action="restart" title="Restart Server">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          <span>Restart</span>
+        </button>
+
+        <button class="btn btn-power-stop" data-power-action="stop" title="Graceful Stop">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+          <span>Stop</span>
+        </button>
+
+        <button class="btn btn-power-kill" data-power-action="kill" title="Force Kill / Terminate">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <span>Kill</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Sub-navigation Tabs matching Pterodactyl -->
+    <nav class="pt-server-nav">
+      <button class="pt-sub-tab active" data-tab="console">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        <span>Console</span>
+      </button>
+      <button class="pt-sub-tab" data-tab="files">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <span>Files</span>
+      </button>
+      <button class="pt-sub-tab" data-tab="databases">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        <span>Databases</span>
+      </button>
+      <button class="pt-sub-tab" data-tab="schedules">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Schedules</span>
+      </button>
+      <button class="pt-sub-tab" data-tab="users">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Users</span>
+      </button>
+      <button class="pt-sub-tab" data-tab="backups">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+        <span>Backups</span>
+      </button>
+      <button class="pt-sub-tab" data-tab="network">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>Network</span>
+      </button>
+      <button class="pt-sub-tab" data-tab="startup">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span>Startup</span>
+      </button>
+      <button class="pt-sub-tab" data-tab="settings">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+
+    <!-- Main Server Panes Container -->
   <main class="app-main">
 
     <!-- 1. TAB: CONSOLE & TERMINAL -->
     <div id="tab-console" class="tab-pane active">
-      <!-- Quick Resource Cards Overview -->
-      <div class="metrics-grid mb-4">
+      <!-- Terminal Box -->
+      <div class="card terminal-card mb-4">
+        <div class="terminal-header flex justify-between items-center">
+          <div class="flex items-center gap-2">
+            <div class="window-dots flex gap-1">
+              <span class="dot-win dot-red"></span>
+              <span class="dot-win dot-yellow"></span>
+              <span class="dot-win dot-green"></span>
+            </div>
+            <span class="terminal-title font-mono text-xs">Wings Daemon Live Console</span>
+          </div>
+          <div class="terminal-actions flex items-center gap-2">
+            <button id="btn-autoscroll" class="btn btn-sm btn-ghost active">Auto-scroll: ON</button>
+            <button id="btn-clear-console" class="btn btn-sm btn-ghost">Clear</button>
+          </div>
+        </div>
+
+        <!-- xterm container -->
+        <div id="terminal-screen" class="terminal-screen"></div>
+
+        <!-- Console Command Prompt -->
+        <form id="terminal-input-form" class="terminal-input-bar">
+          <span class="terminal-prompt-symbol font-mono">$</span>
+          <input 
+            type="text" 
+            id="terminal-command-input" 
+            class="terminal-input-field" 
+            placeholder="Type console command (e.g. help, list, say, tps) and press Enter..." 
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <button type="submit" class="btn btn-primary btn-sm">Send</button>
+        </form>
+      </div>
+
+      <!-- Quick Resource Cards Overview (CPU Load, Memory, Disk, Network) -->
+      <div class="metrics-grid">
         <!-- CPU Card -->
         <div class="card stat-card">
           <div class="flex justify-between items-center mb-1">
@@ -174,45 +342,8 @@
         </div>
       </div>
 
-      <!-- Terminal Box -->
-      <div class="card terminal-card">
-        <div class="terminal-header flex justify-between items-center">
-          <div class="flex items-center gap-2">
-            <div class="window-dots flex gap-1">
-              <span class="dot-win dot-red"></span>
-              <span class="dot-win dot-yellow"></span>
-              <span class="dot-win dot-green"></span>
-            </div>
-            <span class="terminal-title font-mono text-xs">Wings Daemon Live Console</span>
-          </div>
-          <div class="terminal-actions flex items-center gap-2">
-            <button id="btn-autoscroll" class="btn btn-sm btn-ghost active">Auto-scroll: ON</button>
-            <button id="btn-clear-console" class="btn btn-sm btn-ghost">Clear</button>
-          </div>
-        </div>
-
-        <!-- xterm container -->
-        <div id="terminal-screen" class="terminal-screen"></div>
-
-        <!-- Console Command Prompt -->
-        <form id="terminal-input-form" class="terminal-input-bar">
-          <span class="terminal-prompt-symbol font-mono">$</span>
-          <input 
-            type="text" 
-            id="terminal-command-input" 
-            class="terminal-input-field" 
-            placeholder="Type console command (e.g. help, list, say, tps) and press Enter..." 
-            autocomplete="off"
-            spellcheck="false"
-          >
-          <button type="submit" class="btn btn-primary btn-sm">Send</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- 2. TAB: LIVE MONITORING CHARTS -->
-    <div id="tab-monitoring" class="tab-pane">
-      <div class="charts-grid">
+      <!-- Live Monitoring Charts (CPU Load, Memory, Network) placed directly below resource metrics -->
+      <div class="charts-grid mt-4">
         <!-- CPU Chart -->
         <div class="card chart-card">
           <div class="chart-header flex justify-between items-center mb-2">
@@ -257,35 +388,51 @@
       </div>
     </div>
 
-    <!-- 3. TAB: FILE MANAGER -->
+    <!-- 2. TAB: FILE MANAGER -->
     <div id="tab-files" class="tab-pane">
       <div class="card">
         <!-- File Manager Controls -->
         <div class="file-toolbar flex justify-between items-center mb-3">
-          <!-- Breadcrumbs -->
+          <!-- Breadcrumbs starting from /home/container/ -->
           <div id="files-breadcrumbs" class="breadcrumbs flex items-center gap-1 font-mono text-sm">
-            <span class="breadcrumb-item active">/</span>
+            <span class="breadcrumb-item active cursor-pointer" onclick="window.fileManager.loadDirectory('/')">/home/container/</span>
           </div>
 
-          <!-- Buttons -->
+          <!-- Buttons: Default actions vs Mass actions -->
           <div class="flex items-center gap-2">
-            <input type="file" id="file-upload-input" style="display: none;">
-            <button class="btn btn-sm btn-outline" onclick="document.getElementById('file-upload-input').click()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              Upload
-            </button>
-            <button class="btn btn-sm btn-outline" onclick="window.fileManager.promptCreateFile()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              New File
-            </button>
-            <button class="btn btn-sm btn-outline" onclick="window.fileManager.promptCreateFolder()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-              New Folder
-            </button>
-            <button class="btn btn-sm btn-ghost text-danger" onclick="window.fileManager.deleteSelected()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
-              Delete
-            </button>
+            <!-- Normal actions when no checkbox is checked -->
+            <div id="files-default-actions" class="flex items-center gap-2">
+              <input type="file" id="file-upload-input" style="display: none;">
+              <button class="btn btn-sm btn-outline" onclick="document.getElementById('file-upload-input').click()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Upload
+              </button>
+              <button class="btn btn-sm btn-outline" onclick="window.fileManager.promptCreateFile()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                New File
+              </button>
+              <button class="btn btn-sm btn-outline" onclick="window.fileManager.promptCreateFolder()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                New Folder
+              </button>
+            </div>
+
+            <!-- Mass actions shown when row checkbox is checked: Move, Archive, Delete -->
+            <div id="files-mass-actions" class="flex items-center gap-2" style="display: none;">
+              <button class="btn btn-sm btn-outline" onclick="window.fileManager.promptMassMove()" title="Move selected items">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+                Move
+              </button>
+              <button class="btn btn-sm btn-outline" onclick="window.fileManager.massArchive()" title="Archive selected items">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                Archive
+              </button>
+              <button class="btn btn-sm btn-danger" onclick="window.fileManager.deleteSelected()" title="Delete selected items">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                Delete
+              </button>
+            </div>
+
             <button class="btn btn-sm btn-ghost" title="Refresh" onclick="window.fileManager.loadDirectory(window.fileManager.currentDirectory)">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
             </button>
@@ -297,11 +444,11 @@
           <table class="files-table">
             <thead>
               <tr>
-                <th style="width: 40px; text-align: center;"><input type="checkbox" id="select-all-files"></th>
+                <th style="width: 40px; text-align: center;"><input type="checkbox" id="select-all-files" onchange="window.fileManager.toggleSelectAll(this.checked)"></th>
                 <th>File Name</th>
                 <th>Size</th>
                 <th>Last Modified</th>
-                <th style="text-align: right;">Actions</th>
+                <th style="text-align: right; width: 60px;">Actions</th>
               </tr>
             </thead>
             <tbody id="files-table-body">
@@ -316,7 +463,7 @@
       </div>
     </div>
 
-    <!-- 4. TAB: DATABASES -->
+    <!-- 3. TAB: DATABASES -->
     <div id="tab-databases" class="tab-pane">
       <div class="flex justify-between items-center mb-3">
         <div>
@@ -364,97 +511,443 @@
       <div id="schedules-list-container"></div>
     </div>
 
-  </main>
-
-  <!-- MODAL: FILE EDITOR -->
-  <div id="modal-editor" class="modal-overlay">
-    <div class="modal-card modal-lg">
-      <div class="modal-header flex justify-between items-center">
-        <h3 id="editor-modal-title" class="font-bold font-mono text-sm">Edit File</h3>
-        <button class="btn btn-sm btn-ghost" onclick="window.fileManager.closeEditor()">✕</button>
+    <!-- 7. TAB: USERS (SUBUSERS) -->
+    <div id="tab-users" class="tab-pane">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="text-lg font-bold">Server Subusers</h2>
+          <p class="text-xs text-muted">Manage delegated permissions and users who have access to this server.</p>
+        </div>
       </div>
-      <div class="modal-body p-0">
-        <textarea id="editor-content" class="editor-textarea" spellcheck="false"></textarea>
+      <div id="subusers-list-container"></div>
+    </div>
+
+    <!-- 8. TAB: NETWORK (ALLOCATIONS) -->
+    <div id="tab-network" class="tab-pane">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="text-lg font-bold">Network Allocations</h2>
+          <p class="text-xs text-muted">IP addresses and open ports assigned to this server by the daemon.</p>
+        </div>
+      </div>
+      <div id="allocations-list-container"></div>
+    </div>
+
+    <!-- 9. TAB: STARTUP -->
+    <div id="tab-startup" class="tab-pane">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="text-lg font-bold">Startup Configuration</h2>
+          <p class="text-xs text-muted">Modify startup arguments, Docker image, and environment variables.</p>
+        </div>
+      </div>
+      <div id="startup-container"></div>
+    </div>
+
+    <!-- 10. TAB: SETTINGS -->
+    <div id="tab-settings" class="tab-pane">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="text-lg font-bold">Server Settings</h2>
+          <p class="text-xs text-muted">Server details and debug actions.</p>
+        </div>
+      </div>
+
+      <div class="grid gap-4 settings-grid">
+        <!-- Server Name Card -->
+        <div class="card p-4">
+          <h3 class="font-bold text-md mb-2">Change Server Name</h3>
+          <form id="server-rename-form">
+            <div class="form-group mb-3">
+              <label class="form-label">Server Name</label>
+              <input type="text" id="input-server-newname" class="form-input" required>
+            </div>
+            <button type="submit" class="btn btn-sm btn-primary">Save Name</button>
+          </form>
+        </div>
+
+        <!-- Reinstall Action -->
+        <div class="card p-4" style="border-color: rgba(239, 68, 68, 0.4);">
+          <h3 class="font-bold text-md text-danger mb-2">Reinstall Server</h3>
+          <p class="text-xs text-muted mb-3">Reinstalling your server will trigger the initial installation script again. Files might be overwritten.</p>
+          <button id="btn-reinstall-server" class="btn btn-sm btn-power-kill">Reinstall Server</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="pt-footer">
+      <span>Copyright &copy; AllxdDev &bull; Pterodactyl Remote Panel</span>
+    </footer>
+  </main>
+</div>
+
+<!-- =========================================================================
+     VIEW 4: PTERODACTYL ADMINISTRATION AREA (ADMIN DASHBOARD)
+     ========================================================================= -->
+<div id="view-admin" class="app-view admin-view-container">
+  <!-- Admin Top Header Bar -->
+  <div class="admin-header-bar">
+    <div class="admin-header-title">
+      <div class="pt-brand-logo" style="background: #2563eb;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="text-lg font-bold">Pterodactyl Administration</h1>
+        <span class="text-xs text-muted">System Overview & Management</span>
+      </div>
+    </div>
+
+    <button id="btn-admin-exit" class="btn btn-sm btn-outline flex items-center gap-2">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+      <span>Exit to Client Area</span>
+    </button>
+  </div>
+
+  <!-- Admin Navigation Tabs -->
+  <nav class="admin-tabs-bar">
+    <button class="admin-nav-tab active" data-admin-tab="overview">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Overview</span>
+    </button>
+    <button class="admin-nav-tab" data-admin-tab="servers">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+      <span>Servers</span>
+    </button>
+    <button class="admin-nav-tab" data-admin-tab="nodes">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+      <span>Nodes</span>
+    </button>
+    <button class="admin-nav-tab" data-admin-tab="users">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Users</span>
+    </button>
+    <button class="admin-nav-tab" data-admin-tab="logs">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span>Audit Logs</span>
+    </button>
+  </nav>
+
+  <!-- Admin Content Container -->
+  <div class="admin-main-content">
+
+    <!-- ADMIN TAB 1: OVERVIEW -->
+    <div id="admin-tab-overview" class="admin-tab-pane active">
+      <div class="admin-stats-grid">
+        <div class="admin-stat-card">
+          <span class="admin-stat-label">Total Servers</span>
+          <div id="admin-stat-servers" class="admin-stat-number text-cyan">0</div>
+          <div id="admin-stat-servers-active" class="admin-stat-sub">0 Active</div>
+        </div>
+
+        <div class="admin-stat-card">
+          <span class="admin-stat-label">Daemon Nodes</span>
+          <div id="admin-stat-nodes" class="admin-stat-number text-emerald">0</div>
+          <div id="admin-stat-nodes-online" class="admin-stat-sub">0 Online</div>
+        </div>
+
+        <div class="admin-stat-card">
+          <span class="admin-stat-label">Total Users</span>
+          <div id="admin-stat-users" class="admin-stat-number text-purple">0</div>
+          <div id="admin-stat-users-admins" class="admin-stat-sub">0 Admins</div>
+        </div>
+
+        <div class="admin-stat-card">
+          <span class="admin-stat-label">RAM Allocated</span>
+          <div id="admin-stat-ram-alloc" class="admin-stat-number text-amber">0 GB</div>
+          <div id="admin-stat-disk-alloc" class="admin-stat-sub">Disk: 0 GB</div>
+        </div>
+      </div>
+
+      <div class="card p-6">
+        <h3 class="font-bold text-md mb-2 flex items-center gap-2">
+          <span class="status-dot dot-running"></span>
+          System Status & Wings Health
+        </h3>
+        <p id="admin-stat-wings-status" class="text-sm text-emerald font-mono mb-4">All daemon nodes communicating normally.</p>
+        <div class="text-xs text-muted">
+          Pterodactyl Panel Version: <code class="text-white">v1.11.8</code> • Wings Version: <code class="text-white">v1.11.8</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN TAB 2: SERVERS -->
+    <div id="admin-tab-servers" class="admin-tab-pane">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h2 class="text-lg font-bold">All Servers on Panel</h2>
+          <p class="text-xs text-muted">Manage all instances across daemon nodes, toggle suspensions, or jump into consoles.</p>
+        </div>
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Server</th>
+            <th>Node</th>
+            <th>Owner / Address</th>
+            <th>Memory</th>
+            <th>CPU</th>
+            <th>Status</th>
+            <th style="text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="admin-servers-table-body">
+          <tr><td colspan="7" class="text-center p-4 text-muted">Loading servers...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ADMIN TAB 3: NODES -->
+    <div id="admin-tab-nodes" class="admin-tab-pane">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h2 class="text-lg font-bold">Daemon Nodes (Wings)</h2>
+          <p class="text-xs text-muted">Physical and virtual daemon instances hosting Docker containers.</p>
+        </div>
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Node Name</th>
+            <th>FQDN / Daemon Port</th>
+            <th>SSL</th>
+            <th>Memory Allocated</th>
+            <th>Disk Allocated</th>
+            <th>Status</th>
+            <th style="text-align: right;">Wings Version</th>
+          </tr>
+        </thead>
+        <tbody id="admin-nodes-table-body">
+          <tr><td colspan="7" class="text-center p-4 text-muted">Loading nodes...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ADMIN TAB 4: USERS -->
+    <div id="admin-tab-users" class="admin-tab-pane">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h2 class="text-lg font-bold">Registered Users</h2>
+          <p class="text-xs text-muted">Manage client accounts and administrator permissions.</p>
+        </div>
+        <button id="btn-admin-add-user" class="btn btn-sm btn-primary" onclick="document.getElementById('modal-admin-user').classList.add('active')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Create User
+        </button>
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>2FA</th>
+            <th>Created At</th>
+            <th style="text-align: right;">Servers</th>
+          </tr>
+        </thead>
+        <tbody id="admin-users-table-body">
+          <tr><td colspan="6" class="text-center p-4 text-muted">Loading users...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ADMIN TAB 5: AUDIT LOGS -->
+    <div id="admin-tab-logs" class="admin-tab-pane">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h2 class="text-lg font-bold">Administrative Audit Logs</h2>
+          <p class="text-xs text-muted">Comprehensive audit trail of security events and server power state changes.</p>
+        </div>
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>User</th>
+            <th>IP Address</th>
+            <th>Action</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody id="admin-logs-table-body">
+          <tr><td colspan="5" class="text-center p-4 text-muted">Loading logs...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="pt-footer">
+      <span>Copyright &copy; AllxdDev &bull; Pterodactyl Remote Panel</span>
+    </footer>
+  </div>
+</div>
+
+<!-- =========================================================================
+     MODALS
+     ========================================================================= -->
+
+<!-- MODAL: FILE EDITOR -->
+<div id="modal-editor" class="modal-overlay">
+  <div class="modal-card modal-lg">
+    <div class="modal-header flex justify-between items-center">
+      <h3 id="editor-modal-title" class="font-bold font-mono text-sm">Edit File</h3>
+      <button class="btn btn-sm btn-ghost" onclick="window.fileManager.closeEditor()">✕</button>
+    </div>
+    <div class="modal-body p-0">
+      <textarea id="editor-content" class="editor-textarea" spellcheck="false"></textarea>
+    </div>
+    <div class="modal-footer flex justify-end gap-2">
+      <button class="btn btn-outline btn-sm" onclick="window.fileManager.closeEditor()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="window.fileManager.saveEditor()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: CREATE ADMIN USER -->
+<div id="modal-admin-user" class="modal-overlay">
+  <div class="modal-card">
+    <div class="modal-header flex justify-between items-center">
+      <h3 class="font-bold">Create New User</h3>
+      <button class="btn btn-sm btn-ghost" onclick="document.getElementById('modal-admin-user').classList.remove('active')">✕</button>
+    </div>
+    <form id="admin-new-user-form">
+      <div class="modal-body">
+        <div class="form-group mb-3">
+          <label class="form-label" for="new-user-username">Username</label>
+          <input type="text" id="new-user-username" class="form-input" required placeholder="e.g. john_doe">
+        </div>
+        <div class="form-group mb-3">
+          <label class="form-label" for="new-user-email">Email Address</label>
+          <input type="email" id="new-user-email" class="form-input" required placeholder="john@example.com">
+        </div>
+        <div class="form-group mb-3">
+          <label class="form-label" for="new-user-firstname">First Name</label>
+          <input type="text" id="new-user-firstname" class="form-input" placeholder="John">
+        </div>
+        <div class="form-group mb-3">
+          <label class="form-label" for="new-user-lastname">Last Name</label>
+          <input type="text" id="new-user-lastname" class="form-input" placeholder="Doe">
+        </div>
+        <div class="form-group mb-2">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="new-user-is-admin">
+            <span class="text-sm font-medium">Grant Root Administrator Privileges</span>
+          </label>
+        </div>
       </div>
       <div class="modal-footer flex justify-end gap-2">
-        <button class="btn btn-outline btn-sm" onclick="window.fileManager.closeEditor()">Cancel</button>
-        <button class="btn btn-primary btn-sm" onclick="window.fileManager.saveEditor()">Save Changes</button>
+        <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('modal-admin-user').classList.remove('active')">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-sm">Create User</button>
       </div>
-    </div>
+    </form>
   </div>
+</div>
 
-  <!-- MODAL: SETTINGS -->
-  <div id="modal-settings" class="modal-overlay">
-    <div class="modal-card">
-      <div class="modal-header flex justify-between items-center">
-        <h3 class="font-bold">Pterodactyl Connection Settings</h3>
-        <button id="btn-close-settings" class="btn btn-sm btn-ghost">✕</button>
+<!-- GENERIC MODAL: PROMPT & CONFIRM DIALOG -->
+<div id="modal-dialog" class="modal-overlay">
+  <div class="modal-card" style="max-width: 460px;">
+    <div class="modal-header flex justify-between items-center">
+      <h3 id="dialog-title" class="font-bold text-sm">Confirmation</h3>
+      <button class="btn btn-sm btn-ghost" id="dialog-btn-close" type="button">✕</button>
+    </div>
+    <form id="dialog-form">
+      <div class="modal-body">
+        <p id="dialog-message" class="text-sm text-slate-300 leading-relaxed mb-3"></p>
+        <div id="dialog-input-group" class="form-group" style="display: none;">
+          <input type="text" id="dialog-input" class="form-input text-sm font-mono" autocomplete="off">
+        </div>
       </div>
-      <form id="settings-form">
-        <div class="modal-body">
-          <p class="text-xs text-muted mb-4">
-            Connect directly to your Pterodactyl Panel via Client API Key (starts with <code>ptlc_</code>).
-            All requests pass through the internal proxy to eliminate CORS & SSL certificate issues.
-          </p>
+      <div class="modal-footer flex justify-end gap-2">
+        <button type="button" class="btn btn-outline btn-sm" id="dialog-btn-cancel">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-sm" id="dialog-btn-confirm">Confirm</button>
+      </div>
+    </form>
+  </div>
+</div>
 
-          <div class="form-group mb-3">
-            <label class="form-label" for="input-panel-url">Panel URL</label>
-            <input 
-              type="text" 
-              id="input-panel-url" 
-              class="form-input" 
-              placeholder="https://panel.example.com"
-              required
-            >
-            <span class="text-xs text-muted">Enter panel domain with https:// (or type "demo" for offline test mode)</span>
+<!-- ACCOUNT / PANEL SETTINGS MODAL -->
+<div id="modal-settings" class="modal-overlay">
+  <div class="modal-card" style="max-width: 480px;">
+    <div class="modal-header">
+      <div class="flex items-center gap-2">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        <h3 class="font-bold text-sm">Account &amp; Panel Settings</h3>
+      </div>
+      <button class="modal-close-btn" id="settings-modal-close" type="button" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background: rgba(15, 23, 42, 0.6); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);">
+        <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 10px;">Account Information</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.85rem;">
+          <div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);">Username</div>
+            <div id="settings-username" style="font-weight: 600; color: #fff;">---</div>
           </div>
-
-          <div class="form-group mb-3">
-            <label class="form-label" for="input-api-key">Client API Key</label>
-            <input 
-              type="password" 
-              id="input-api-key" 
-              class="form-input" 
-              placeholder="ptlc_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-              required
-            >
-            <span class="text-xs text-muted">Generate at Panel → Account Settings → API Credentials</span>
+          <div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);">Role</div>
+            <div id="settings-role" style="font-weight: 600; color: #38bdf8;">---</div>
           </div>
-
-          <div class="form-group mb-3">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" id="input-demo-mode">
-              <span class="text-sm font-medium">Enable Demo Simulator (Offline Mode)</span>
-            </label>
-            <span class="text-xs text-muted ml-5">Simulates interactive Wings WebSocket daemon, Minecraft logs, databases & files.</span>
+          <div style="grid-column: span 2;">
+            <div style="font-size: 0.72rem; color: var(--text-muted);">Email Address</div>
+            <div id="settings-email" style="font-weight: 600; color: #fff; word-break: break-all;">---</div>
           </div>
         </div>
+      </div>
 
-        <div class="modal-footer flex justify-end gap-2">
-          <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('modal-settings').classList.remove('active')">Cancel</button>
-          <button type="submit" class="btn btn-primary btn-sm">Save & Connect</button>
+      <div style="background: rgba(15, 23, 42, 0.6); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);">
+        <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px;">Authentication Status</div>
+        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem;">
+          <div>
+            <div style="font-weight: 600; color: #fff;">Client API Session</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);">Connected via personal API Key</div>
+          </div>
+          <span class="badge badge-success" style="font-size: 0.7rem; padding: 2px 8px;">Active</span>
         </div>
-      </form>
+      </div>
+
+      <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.5;">
+        To switch API keys, log out from your account menu and enter a new personal Client API key generated in your main Pterodactyl panel.
+      </div>
+    </div>
+    <div class="modal-footer flex justify-end gap-2">
+      <button type="button" class="btn btn-primary btn-sm" id="settings-modal-btn-close">Close</button>
     </div>
   </div>
+</div>
 
-  <!-- Toast Notification Container -->
-  <div id="toast-container" class="toast-container"></div>
+<!-- File Manager 3-Dots Context Menu -->
+<div id="file-context-menu" class="file-context-menu" style="display: none;"></div>
 
-  <!-- Vendor Scripts -->
-  <script src="vendor/xterm.js"></script>
-  <script src="vendor/addon-fit.js"></script>
-  <script src="vendor/addon-web-links.js"></script>
-  <script src="vendor/chart.umd.min.js"></script>
+<!-- Toast Notification Container -->
+<div id="toast-container" class="toast-container"></div>
 
-  <!-- Application Logic Modules -->
-  <script src="js/api.js"></script>
-  <script src="js/terminal.js"></script>
-  <script src="js/monitoring.js"></script>
-  <script src="js/files.js"></script>
-  <script src="js/database.js"></script>
-  <script src="js/backups.js"></script>
-  <script src="js/schedules.js"></script>
-  <script src="js/app.js"></script>
+<!-- Vendor Scripts -->
+<script src="vendor/xterm.js"></script>
+<script src="vendor/addon-fit.js"></script>
+<script src="vendor/addon-web-links.js"></script>
+<script src="vendor/chart.umd.min.js"></script>
+
+<!-- Application Logic Modules -->
+<script src="js/api.js"></script>
+<script src="js/terminal.js"></script>
+<script src="js/monitoring.js"></script>
+<script src="js/files.js"></script>
+<script src="js/database.js"></script>
+<script src="js/backups.js"></script>
+<script src="js/schedules.js"></script>
+<script src="js/serverExtra.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>

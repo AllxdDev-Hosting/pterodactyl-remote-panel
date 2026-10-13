@@ -132,7 +132,7 @@ class BackupController {
   }
 
   async promptCreate() {
-    const name = prompt('Backup Name (leave empty for auto):', `Backup-${new Date().toISOString().slice(0, 10)}`);
+    const name = await (window.dialog ? window.dialog.prompt('Backup Name (leave empty for auto):', `Backup-${new Date().toISOString().slice(0, 10)}`, 'Create Backup') : prompt('Backup Name (leave empty for auto):', `Backup-${new Date().toISOString().slice(0, 10)}`));
     if (name === null) return;
 
     try {
@@ -159,10 +159,10 @@ class BackupController {
   }
 
   async restoreBackup(uuid, name) {
-    const confirmRestore = confirm(`WARNING: Restoring backup "${name}" will overwrite files on the server.\n\nDo you want to proceed?`);
+    const confirmRestore = await (window.dialog ? window.dialog.confirm(`WARNING: Restoring backup "${name}" will overwrite files on the server.\n\nDo you want to proceed?`, 'Restore Backup', true) : confirm(`WARNING: Restoring backup "${name}" will overwrite files on the server.\n\nDo you want to proceed?`));
     if (!confirmRestore) return;
 
-    const truncate = confirm(`Do you want to wipe existing files before restoring?\n(Click Cancel to keep unmatched existing files)`);
+    const truncate = await (window.dialog ? window.dialog.confirm('Do you want to wipe existing files before restoring?', 'Wipe Existing Files', true) : confirm('Do you want to wipe existing files before restoring?'));
 
     try {
       this.notify('Triggering restore operation...', 'info');
@@ -184,7 +184,8 @@ class BackupController {
   }
 
   async deleteBackup(uuid, name) {
-    if (!confirm(`Are you sure you want to delete backup "${name}"?`)) return;
+    const confirmed = await (window.dialog ? window.dialog.confirm(`Are you sure you want to delete backup "${name}"?`, 'Delete Backup', true) : confirm(`Are you sure you want to delete backup "${name}"?`));
+    if (!confirmed) return;
 
     try {
       await this.api.deleteBackup(this.currentServerId, uuid);

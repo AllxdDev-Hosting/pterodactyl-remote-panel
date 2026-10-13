@@ -1,0 +1,18 @@
+[Unit]
+Description=Pterodactyl Remote Client Panel by AllxdDev
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/pterodactyl-panel
+EnvironmentFile=/var/www/pterodactyl-panel/.env
+ExecStart=/usr/bin/node /var/www/pterodactyl-panel/server.js
+Restart=always
+RestartSec=5
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=pt-remote-panel
+
+[Install]
+WantedBy=multi-user.target

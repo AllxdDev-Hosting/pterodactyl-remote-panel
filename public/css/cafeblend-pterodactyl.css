@@ -1,0 +1,849 @@
+/* ==========================================================================
+   CafeBlend Theme for Pterodactyl Remote Server Management Dashboard
+   Transforms the Pterodactyl Panel UI into a cozy, coffee-toned neumorphic aesthetic.
+   Maintains 100% of Pterodactyl's remote server management capabilities.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+body.theme-cafeblend {
+  --bg-base: #FDF6EC;
+  --bg-surface: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #FAF0E1;
+  --bg-input: #F0E6D6;
+  --border-color: #E8DDD0;
+  --border-focus: #8B5E3C;
+
+  --text-main: #3E2723;
+  --text-muted: #6B5B52;
+  --text-dim: #8D6E63;
+
+  --accent-cyan: #8B5E3C;
+  --accent-blue: #C4956A;
+  --accent-emerald: #059669;
+  --accent-emerald-glow: rgba(5, 150, 105, 0.2);
+  --accent-amber: #D97706;
+  --accent-red: #EF4444;
+  --accent-purple: #7C3AED;
+
+  --font-sans: 'Work Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+  --font-headline: 'DM Serif Display', Georgia, serif;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  /* Neumorphic Shadow Architecture */
+  --cb-shadow-raised: 6px 6px 14px #D5C9B8, -6px -6px 14px #FFFFFF;
+  --cb-shadow-raised-hover: 8px 8px 18px #C8BCAB, -8px -8px 18px #FFFFFF;
+  --cb-shadow-raised-sm: 3px 3px 7px #D5C9B8, -3px -3px 7px #FFFFFF;
+  --cb-shadow-inset: inset 3px 3px 6px #D5C9B8, inset -3px -3px 6px #FFFFFF;
+  --cb-shadow-inset-sm: inset 2px 2px 4px #D5C9B8, inset -2px -2px 4px #FFFFFF;
+
+  background-color: var(--bg-base) !important;
+  color: var(--text-main) !important;
+  font-family: var(--font-sans) !important;
+}
+
+/* Base Headings */
+body.theme-cafeblend h1,
+body.theme-cafeblend h2,
+body.theme-cafeblend h3 {
+  font-family: var(--font-headline);
+  color: #3E2723;
+  letter-spacing: -0.01em;
+}
+
+/* ==========================================================================
+   1. AUTHENTIC TOP NAVBAR (CafeBlend Neumorphic Style)
+   ========================================================================== */
+body.theme-cafeblend .pt-navbar {
+  background-color: #FFFFFF !important;
+  border-bottom: 1px solid #E8DDD0 !important;
+  box-shadow: 0 4px 16px rgba(139, 94, 60, 0.08) !important;
+}
+
+body.theme-cafeblend .pt-brand-logo {
+  background: linear-gradient(135deg, #8B5E3C, #C4956A) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 12px rgba(139, 94, 60, 0.3) !important;
+  color: #FFFFFF !important;
+}
+
+body.theme-cafeblend .pt-brand-title {
+  font-family: var(--font-headline) !important;
+  color: #3E2723 !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+}
+
+body.theme-cafeblend .pt-brand-sub {
+  color: #8D6E63 !important;
+  font-weight: 600 !important;
+}
+
+body.theme-cafeblend #header-server-switcher select,
+body.theme-cafeblend .form-input {
+  background-color: #F0E6D6 !important;
+  border: 1px solid #E8DDD0 !important;
+  box-shadow: var(--cb-shadow-inset-sm) !important;
+  color: #3E2723 !important;
+  border-radius: 8px !important;
+  font-family: var(--font-sans) !important;
+}
+
+body.theme-cafeblend #header-server-switcher select:focus,
+body.theme-cafeblend .form-input:focus {
+  border-color: #8B5E3C !important;
+  box-shadow: var(--cb-shadow-inset-sm), 0 0 0 3px rgba(139, 94, 60, 0.2) !important;
+  outline: none !important;
+}
+
+body.theme-cafeblend .pt-search-input {
+  background-color: #F0E6D6 !important;
+  border: 1px solid #E8DDD0 !important;
+  box-shadow: var(--cb-shadow-inset-sm) !important;
+  color: #3E2723 !important;
+  border-radius: 8px !important;
+  font-family: var(--font-sans) !important;
+}
+
+body.theme-cafeblend .pt-search-input::placeholder {
+  color: #8D6E63 !important;
+}
+
+body.theme-cafeblend .pt-search-input:focus {
+  border-color: #8B5E3C !important;
+  box-shadow: var(--cb-shadow-inset-sm), 0 0 0 3px rgba(139, 94, 60, 0.2) !important;
+}
+
+body.theme-cafeblend #header-mode-badge {
+  background: #FEF3C7 !important;
+  color: #D97706 !important;
+  border: 1px solid #FCD34D !important;
+  font-weight: 600 !important;
+  border-radius: 9999px !important;
+}
+
+body.theme-cafeblend .pt-btn-admin-gear {
+  background: #FAF0E1 !important;
+  color: #8B5E3C !important;
+  border: 1px solid #C4956A !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  box-shadow: var(--cb-shadow-raised-sm) !important;
+}
+
+body.theme-cafeblend .pt-btn-admin-gear:hover {
+  background: #8B5E3C !important;
+  color: #FFFFFF !important;
+}
+
+body.theme-cafeblend .pt-user-badge {
+  background: #FAF0E1 !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 10px !important;
+  box-shadow: var(--cb-shadow-raised-sm) !important;
+}
+
+body.theme-cafeblend #nav-user-name {
+  color: #3E2723 !important;
+}
+
+body.theme-cafeblend #nav-user-role {
+  color: #8D6E63 !important;
+}
+
+body.theme-cafeblend .btn-ghost {
+  color: #5D4037 !important;
+}
+
+body.theme-cafeblend .btn-ghost:hover {
+  background: #F0E6D6 !important;
+  color: #3E2723 !important;
+}
+
+/* ==========================================================================
+   2. LOGIN SCREEN (CafeBlend Warm Elevation)
+   ========================================================================== */
+body.theme-cafeblend .login-view-container {
+  background: radial-gradient(circle at 50% 20%, #FAF0E1 0%, #FDF6EC 80%) !important;
+}
+
+body.theme-cafeblend .login-card {
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 18px !important;
+  box-shadow: 10px 10px 24px #D5C9B8, -10px -10px 24px #FFFFFF !important;
+}
+
+body.theme-cafeblend .login-logo {
+  background: linear-gradient(135deg, #8B5E3C, #C4956A) !important;
+  box-shadow: 0 8px 24px rgba(139, 94, 60, 0.35) !important;
+  border-radius: 16px !important;
+}
+
+body.theme-cafeblend .login-title {
+  font-family: var(--font-headline) !important;
+  font-size: 1.65rem !important;
+  color: #3E2723 !important;
+}
+
+body.theme-cafeblend .login-subtitle {
+  color: #8D6E63 !important;
+  font-size: 0.85rem !important;
+}
+
+body.theme-cafeblend .login-tabs {
+  background: #F0E6D6 !important;
+  border: 1px solid #E8DDD0 !important;
+  box-shadow: var(--cb-shadow-inset-sm) !important;
+  border-radius: 10px !important;
+  padding: 4px !important;
+}
+
+body.theme-cafeblend .login-tab-btn {
+  color: #6B5B52 !important;
+}
+
+body.theme-cafeblend .login-tab-btn.active {
+  background: #8B5E3C !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 3px 8px rgba(139, 94, 60, 0.3) !important;
+  border-radius: 8px !important;
+}
+
+body.theme-cafeblend .quick-login-pills {
+  background: #FAF0E1 !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 12px !important;
+}
+
+body.theme-cafeblend .quick-pill-btn {
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 10px !important;
+  color: #3E2723 !important;
+  box-shadow: var(--cb-shadow-raised-sm) !important;
+  transition: all 0.2s ease !important;
+}
+
+body.theme-cafeblend .quick-pill-btn:hover {
+  border-color: #8B5E3C !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 4px 4px 10px #C8BCAB, -4px -4px 10px #FFFFFF !important;
+}
+
+body.theme-cafeblend .btn-primary {
+  background: #8B5E3C !important;
+  color: #FFFFFF !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 12px rgba(139, 94, 60, 0.25) !important;
+  border: none !important;
+  transition: all 0.2s ease !important;
+}
+
+body.theme-cafeblend .btn-primary:hover {
+  background: #6B4226 !important;
+  box-shadow: 0 6px 16px rgba(107, 66, 38, 0.35) !important;
+}
+
+/* ==========================================================================
+   3. SERVER LIST VIEW (Neumorphic Server Cards)
+   ========================================================================== */
+body.theme-cafeblend .server-list-view {
+  background-color: var(--bg-base) !important;
+}
+
+body.theme-cafeblend .server-list-title h2 {
+  font-family: var(--font-headline) !important;
+  font-size: 1.85rem !important;
+  color: #3E2723 !important;
+}
+
+body.theme-cafeblend .server-list-title p {
+  color: #8D6E63 !important;
+}
+
+body.theme-cafeblend .server-list-header button,
+body.theme-cafeblend #filter-all,
+body.theme-cafeblend #filter-running,
+body.theme-cafeblend #filter-offline,
+body.theme-cafeblend #btn-refresh-servers {
+  background: #FAF0E1 !important;
+  border: 1px solid #E8DDD0 !important;
+  color: #5D4037 !important;
+  border-radius: 9999px !important;
+  box-shadow: var(--cb-shadow-raised-sm) !important;
+  font-weight: 600 !important;
+  padding: 0.45rem 1rem !important;
+}
+
+body.theme-cafeblend .server-list-header button.active,
+body.theme-cafeblend #filter-all.active,
+body.theme-cafeblend #filter-running.active,
+body.theme-cafeblend #filter-offline.active {
+  background: #8B5E3C !important;
+  color: #FFFFFF !important;
+  border-color: #8B5E3C !important;
+  box-shadow: 0 3px 8px rgba(139, 94, 60, 0.3) !important;
+}
+
+/* Individual Pterodactyl Server Card */
+body.theme-cafeblend .pt-server-card {
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 16px !important;
+  box-shadow: var(--cb-shadow-raised) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+body.theme-cafeblend .pt-server-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: var(--cb-shadow-raised-hover) !important;
+  border-color: #C4956A !important;
+}
+
+body.theme-cafeblend .pt-server-card::before {
+  background: #C4956A !important;
+}
+
+body.theme-cafeblend .pt-server-card:hover::before {
+  background: #8B5E3C !important;
+}
+
+body.theme-cafeblend .pt-card-name {
+  font-family: var(--font-headline) !important;
+  font-size: 1.15rem !important;
+  color: #3E2723 !important;
+}
+
+body.theme-cafeblend .pt-card-egg {
+  color: #8D6E63 !important;
+}
+
+body.theme-cafeblend .status-running {
+  background: #DCFCE7 !important;
+  color: #059669 !important;
+  border: 1px solid #86EFAC !important;
+}
+body.theme-cafeblend .status-running::before {
+  background-color: #059669 !important;
+  box-shadow: 0 0 8px #059669 !important;
+}
+
+body.theme-cafeblend .status-starting {
+  background: #FEF3C7 !important;
+  color: #D97706 !important;
+  border: 1px solid #FCD34D !important;
+}
+body.theme-cafeblend .status-starting::before {
+  background-color: #D97706 !important;
+  box-shadow: 0 0 8px #D97706 !important;
+}
+
+body.theme-cafeblend .status-offline {
+  background: #FEE2E2 !important;
+  color: #EF4444 !important;
+  border: 1px solid #FCA5A5 !important;
+}
+body.theme-cafeblend .status-offline::before {
+  background-color: #EF4444 !important;
+}
+
+body.theme-cafeblend .pt-card-address {
+  background: #F0E6D6 !important;
+  border: 1px solid #E8DDD0 !important;
+  box-shadow: var(--cb-shadow-inset-sm) !important;
+  color: #8B5E3C !important;
+  font-family: var(--font-mono) !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+}
+
+body.theme-cafeblend .pt-card-gauges {
+  background: #FAF0E1 !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 10px !important;
+}
+
+body.theme-cafeblend .pt-mini-gauge-label {
+  color: #8D6E63 !important;
+}
+
+body.theme-cafeblend .pt-mini-gauge-val {
+  color: #3E2723 !important;
+  font-family: var(--font-mono) !important;
+}
+
+body.theme-cafeblend .pt-card-footer {
+  border-top: 1px solid #E8DDD0 !important;
+}
+
+body.theme-cafeblend .pt-card-node {
+  color: #8D6E63 !important;
+}
+
+body.theme-cafeblend .pt-card-cta {
+  color: #8B5E3C !important;
+  font-weight: 700 !important;
+}
+
+/* ==========================================================================
+   4. SERVER MANAGEMENT VIEW (Breadcrumbs, Tabs, Power)
+   ========================================================================== */
+body.theme-cafeblend .server-view-breadcrumbs {
+  background: #FAF0E1 !important;
+  border-bottom: 1px solid #E8DDD0 !important;
+  color: #5D4037 !important;
+}
+
+body.theme-cafeblend .btn-breadcrumb-back {
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  color: #5D4037 !important;
+  border-radius: 8px !important;
+  box-shadow: var(--cb-shadow-raised-sm) !important;
+}
+
+body.theme-cafeblend .btn-breadcrumb-back:hover {
+  background: #F0E6D6 !important;
+  border-color: #8B5E3C !important;
+  color: #3E2723 !important;
+}
+
+body.theme-cafeblend .server-header-card {
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 16px !important;
+  box-shadow: var(--cb-shadow-raised) !important;
+}
+
+body.theme-cafeblend .server-header-card h2 {
+  font-family: var(--font-headline) !important;
+  color: #3E2723 !important;
+}
+
+body.theme-cafeblend .pt-server-nav {
+  background: #FAF0E1 !important;
+  border-bottom: 1px solid #E8DDD0 !important;
+}
+
+body.theme-cafeblend .pt-sub-tab {
+  color: #6B5B52 !important;
+  font-family: var(--font-sans) !important;
+  font-weight: 600 !important;
+}
+
+body.theme-cafeblend .pt-sub-tab:hover {
+  color: #3E2723 !important;
+}
+
+body.theme-cafeblend .pt-sub-tab.active {
+  color: #8B5E3C !important;
+  border-bottom-color: #8B5E3C !important;
+}
+
+/* Power Buttons with Warm Aesthetic */
+body.theme-cafeblend .btn-power.start {
+  background: #DCFCE7 !important;
+  color: #059669 !important;
+  border: 1px solid #86EFAC !important;
+  font-weight: 600 !important;
+}
+body.theme-cafeblend .btn-power.start:hover:not(:disabled) {
+  background: #059669 !important;
+  color: #FFFFFF !important;
+}
+
+body.theme-cafeblend .btn-power.restart {
+  background: #FEF3C7 !important;
+  color: #D97706 !important;
+  border: 1px solid #FCD34D !important;
+  font-weight: 600 !important;
+}
+body.theme-cafeblend .btn-power.restart:hover:not(:disabled) {
+  background: #D97706 !important;
+  color: #FFFFFF !important;
+}
+
+body.theme-cafeblend .btn-power.stop {
+  background: #FEE2E2 !important;
+  color: #EF4444 !important;
+  border: 1px solid #FCA5A5 !important;
+  font-weight: 600 !important;
+}
+body.theme-cafeblend .btn-power.stop:hover:not(:disabled) {
+  background: #EF4444 !important;
+  color: #FFFFFF !important;
+}
+
+body.theme-cafeblend .btn-power.kill {
+  background: #FEE2E2 !important;
+  color: #B91C1C !important;
+  border: 1px solid #FCA5A5 !important;
+  font-weight: 600 !important;
+}
+body.theme-cafeblend .btn-power.kill:hover:not(:disabled) {
+  background: #B91C1C !important;
+  color: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   5. CONSOLE & TERMINAL (Rich Espresso Dark Roast)
+   ========================================================================== */
+body.theme-cafeblend .terminal-card {
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 16px !important;
+  box-shadow: var(--cb-shadow-raised) !important;
+  overflow: hidden !important;
+}
+
+body.theme-cafeblend .terminal-header {
+  background: #FAF0E1 !important;
+  border-bottom: 1px solid #E8DDD0 !important;
+  color: #3E2723 !important;
+  font-weight: 600 !important;
+}
+
+body.theme-cafeblend .terminal-screen {
+  background-color: #201610 !important; /* Rich Dark Roast */
+}
+
+body.theme-cafeblend .command-bar {
+  background: #FAF0E1 !important;
+  border-top: 1px solid #E8DDD0 !important;
+}
+
+body.theme-cafeblend .command-prompt-symbol {
+  color: #8B5E3C !important;
+  font-weight: 700 !important;
+}
+
+body.theme-cafeblend .command-input {
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 6px !important;
+  padding: 0.45rem 0.75rem !important;
+  color: #3E2723 !important;
+  box-shadow: var(--cb-shadow-inset-sm) !important;
+  font-family: var(--font-mono) !important;
+  caret-color: #8B5E3C !important;
+}
+
+body.theme-cafeblend .command-input::placeholder {
+  color: #8D6E63 !important;
+}
+
+body.theme-cafeblend .btn-quick-cmd {
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  color: #5D4037 !important;
+  box-shadow: var(--cb-shadow-raised-sm) !important;
+}
+
+body.theme-cafeblend .btn-quick-cmd:hover {
+  background: #8B5E3C !important;
+  color: #FFFFFF !important;
+  border-color: #8B5E3C !important;
+}
+
+/* ==========================================================================
+   6. METRICS & TELEMETRY CHARTS
+   ========================================================================== */
+body.theme-cafeblend .chart-card {
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 14px !important;
+  box-shadow: var(--cb-shadow-raised) !important;
+}
+
+body.theme-cafeblend .chart-header {
+  color: #3E2723 !important;
+}
+
+body.theme-cafeblend .chart-header span:first-child {
+  color: #3E2723 !important;
+  font-weight: 700 !important;
+}
+
+body.theme-cafeblend .chart-header .badge,
+body.theme-cafeblend .chart-header span.font-mono {
+  background: #FAF0E1 !important;
+  color: #8B5E3C !important;
+  border: 1px solid #C4956A !important;
+  font-family: var(--font-mono) !important;
+  border-radius: 6px !important;
+}
+
+body.theme-cafeblend .stat-card {
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 14px !important;
+  box-shadow: var(--cb-shadow-raised) !important;
+}
+
+body.theme-cafeblend .stat-title {
+  color: #8D6E63 !important;
+}
+
+body.theme-cafeblend .stat-value {
+  color: #3E2723 !important;
+  font-family: var(--font-mono) !important;
+}
+
+body.theme-cafeblend .stat-subtext {
+  color: #8D6E63 !important;
+}
+
+body.theme-cafeblend .icon-cpu { background: #FAF0E1 !important; color: #8B5E3C !important; }
+body.theme-cafeblend .icon-ram { background: #FAF0E1 !important; color: #C4956A !important; }
+body.theme-cafeblend .icon-disk { background: #FAF0E1 !important; color: #78350F !important; }
+body.theme-cafeblend .icon-net { background: #FAF0E1 !important; color: #92400E !important; }
+
+/* ==========================================================================
+   7. SUB-TABS (Files, Databases, Backups, Network, Settings, etc.)
+   ========================================================================== */
+body.theme-cafeblend .subview-container,
+body.theme-cafeblend .tab-pane-content {
+  background: transparent !important;
+}
+
+body.theme-cafeblend .file-manager-container,
+body.theme-cafeblend .databases-container,
+body.theme-cafeblend .backups-container,
+body.theme-cafeblend .network-container,
+body.theme-cafeblend .startup-container,
+body.theme-cafeblend .users-container,
+body.theme-cafeblend .schedules-container,
+body.theme-cafeblend .settings-container,
+body.theme-cafeblend .activity-container {
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 16px !important;
+  box-shadow: var(--cb-shadow-raised) !important;
+  padding: 1.5rem !important;
+}
+
+body.theme-cafeblend table,
+body.theme-cafeblend .pt-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+}
+
+body.theme-cafeblend table th,
+body.theme-cafeblend .pt-table th {
+  background: #FAF0E1 !important;
+  color: #3E2723 !important;
+  border-bottom: 1px solid #E8DDD0 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+  padding: 0.75rem 1rem !important;
+}
+
+body.theme-cafeblend table td,
+body.theme-cafeblend .pt-table td {
+  border-bottom: 1px solid #F0E6D6 !important;
+  color: #3E2723 !important;
+  padding: 0.85rem 1rem !important;
+}
+
+body.theme-cafeblend table tr:hover td,
+body.theme-cafeblend .pt-table tr:hover td {
+  background-color: #FDF6EC !important;
+}
+
+body.theme-cafeblend .btn-secondary {
+  background: #FAF0E1 !important;
+  border: 1px solid #C4956A !important;
+  color: #8B5E3C !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  box-shadow: var(--cb-shadow-raised-sm) !important;
+}
+
+body.theme-cafeblend .btn-secondary:hover {
+  background: #8B5E3C !important;
+  color: #FFFFFF !important;
+}
+
+body.theme-cafeblend .btn-danger {
+  background: #FEE2E2 !important;
+  border: 1px solid #FCA5A5 !important;
+  color: #EF4444 !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+}
+
+body.theme-cafeblend .btn-danger:hover {
+  background: #EF4444 !important;
+  color: #FFFFFF !important;
+}
+
+/* Card items inside tabs */
+body.theme-cafeblend .database-card,
+body.theme-cafeblend .backup-card,
+body.theme-cafeblend .allocation-card,
+body.theme-cafeblend .user-card,
+body.theme-cafeblend .startup-card {
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 12px !important;
+  box-shadow: var(--cb-shadow-raised-sm) !important;
+  padding: 1.25rem !important;
+}
+
+/* ==========================================================================
+   8. PTERODACTYL ADMINISTRATION AREA
+   ========================================================================== */
+body.theme-cafeblend .admin-view-container {
+  background: #FDF6EC !important;
+}
+
+body.theme-cafeblend .admin-header-bar {
+  background: #FFFFFF !important;
+  border-bottom: 1px solid #E8DDD0 !important;
+  box-shadow: 0 4px 12px rgba(139, 94, 60, 0.06) !important;
+}
+
+body.theme-cafeblend .admin-header-title h1 {
+  font-family: var(--font-headline) !important;
+  color: #3E2723 !important;
+}
+
+body.theme-cafeblend .admin-tabs-bar {
+  background: #FAF0E1 !important;
+  border-bottom: 1px solid #E8DDD0 !important;
+}
+
+body.theme-cafeblend .admin-nav-tab {
+  color: #6B5B52 !important;
+  font-family: var(--font-sans) !important;
+  font-weight: 600 !important;
+}
+
+body.theme-cafeblend .admin-nav-tab:hover {
+  color: #3E2723 !important;
+}
+
+body.theme-cafeblend .admin-nav-tab.active {
+  color: #8B5E3C !important;
+  border-bottom-color: #8B5E3C !important;
+}
+
+body.theme-cafeblend .admin-stat-card {
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 16px !important;
+  box-shadow: var(--cb-shadow-raised) !important;
+}
+
+body.theme-cafeblend .admin-stat-number {
+  font-family: var(--font-headline) !important;
+  color: #8B5E3C !important;
+}
+
+body.theme-cafeblend .admin-stat-label {
+  color: #8D6E63 !important;
+}
+
+body.theme-cafeblend .admin-table {
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 14px !important;
+  box-shadow: var(--cb-shadow-raised) !important;
+}
+
+body.theme-cafeblend .admin-table th {
+  background: #FAF0E1 !important;
+  color: #3E2723 !important;
+  border-bottom: 1px solid #E8DDD0 !important;
+}
+
+body.theme-cafeblend .admin-table td {
+  border-bottom: 1px solid #F0E6D6 !important;
+  color: #3E2723 !important;
+}
+
+body.theme-cafeblend .admin-table tr:hover td {
+  background-color: #FDF6EC !important;
+}
+
+/* ==========================================================================
+   9. MODALS (File Editor, Create User, Settings)
+   ========================================================================== */
+body.theme-cafeblend .modal-backdrop {
+  background-color: rgba(62, 39, 35, 0.5) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+body.theme-cafeblend .modal-card,
+body.theme-cafeblend .pt-modal {
+  background: #FFFFFF !important;
+  border: 1px solid #E8DDD0 !important;
+  border-radius: 18px !important;
+  box-shadow: 12px 12px 30px #BBAFA0 !important;
+}
+
+body.theme-cafeblend .modal-header {
+  background: #FAF0E1 !important;
+  border-bottom: 1px solid #E8DDD0 !important;
+  border-radius: 18px 18px 0 0 !important;
+  padding: 1.25rem 1.5rem !important;
+}
+
+body.theme-cafeblend .modal-header h3 {
+  font-family: var(--font-headline) !important;
+  color: #3E2723 !important;
+}
+
+body.theme-cafeblend .file-editor-textarea,
+body.theme-cafeblend .editor-textarea {
+  background: #201610 !important;
+  color: #FDF6EC !important;
+  border: 1px solid #C4956A !important;
+  font-family: var(--font-mono) !important;
+  border-radius: 8px !important;
+}
+
+/* Theme Switcher Button in Header */
+.btn-theme-toggle {
+  background: #FAF0E1;
+  border: 1px solid #C4956A;
+  color: #8B5E3C;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.4rem 0.8rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  box-shadow: 2px 2px 5px #D5C9B8, -2px -2px 5px #FFFFFF;
+  transition: all 0.2s ease;
+}
+
+.btn-theme-toggle:hover {
+  background: #8B5E3C;
+  color: #FFFFFF;
+  border-color: #8B5E3C;
+}
+
+/* Ensure code/badge text is readable */
+body.theme-cafeblend code {
+  font-family: var(--font-mono);
+  background: #F0E6D6;
+  color: #8B5E3C;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}

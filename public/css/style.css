@@ -773,17 +773,25 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .files-table {
   width: 100%;
+  min-width: 650px;
   border-collapse: collapse;
   font-size: 0.85rem;
 }
 
 .files-table th {
   text-align: left;
-  padding: 0.75rem 1.25rem;
+  padding: 0.75rem 1rem;
   background: rgba(13, 19, 33, 0.6);
   color: var(--text-dim);
   font-weight: 600;
@@ -791,10 +799,11 @@ body {
   font-size: 0.725rem;
   letter-spacing: 0.05em;
   border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
 }
 
 .files-table td {
-  padding: 0.75rem 1.25rem;
+  padding: 0.65rem 1rem;
   border-bottom: 1px solid rgba(31, 46, 72, 0.5);
   vertical-align: middle;
 }
@@ -803,23 +812,108 @@ body {
   background-color: var(--bg-card-hover);
 }
 
-.file-name-cell {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  cursor: pointer;
-  font-weight: 500;
+.files-table tr.row-selected td {
+  background-color: rgba(59, 130, 246, 0.09) !important;
 }
 
-.file-icon {
-  font-size: 1.1rem;
+.file-name-cell {
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.file-name-cell .file-icon {
+  margin-right: 0.55rem;
+  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+}
+
+.file-name-cell .file-name {
+  vertical-align: middle;
+}
+
+.file-size-cell,
+.file-date-cell {
+  white-space: nowrap;
+  font-size: 0.8rem;
 }
 
 .file-actions-cell {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* 3-dots Context Menu for File Actions */
+#file-context-menu {
+  position: fixed;
+  z-index: 9999;
+  min-width: 165px;
+  background: #17202f;
+  border: 1px solid #233044;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.file-menu-item {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  justify-content: flex-end;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.file-menu-item:hover {
+  background: #233044;
+  color: #ffffff;
+}
+
+.file-menu-item.text-danger {
+  color: #ef4444;
+}
+
+.file-menu-item.text-danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.file-menu-divider {
+  height: 1px;
+  background: #233044;
+  margin: 4px 0;
+}
+
+.btn-file-dots {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #94a3b8;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.btn-file-dots:hover {
+  color: #ffffff;
+  background: #233044;
+  border-color: #334155;
 }
 
 .btn-table-action {
@@ -1092,9 +1186,11 @@ body {
   min-height: 90px;
 }
 
-.code-editor-area {
-  flex: 1;
-  min-height: 400px;
+.code-editor-area,
+.editor-textarea {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 480px;
   font-family: var(--font-mono);
   font-size: 0.85rem;
   line-height: 1.6;
@@ -1106,6 +1202,7 @@ body {
   outline: none;
   tab-size: 2;
   white-space: pre;
+  box-sizing: border-box;
 }
 
 .form-help {
@@ -1167,3 +1264,1024 @@ body {
     display: none; /* Accessible in console tab */
   }
 }
+
+/* ==========================================================================
+   Pterodactyl 100% Theme Additions & Multi-View Architecture
+   ========================================================================== */
+
+/* Multi-View System */
+.app-view {
+  display: none !important;
+}
+.app-view.active {
+  display: block !important;
+}
+.login-view-container.active {
+  display: flex !important;
+}
+.hidden {
+  display: none !important;
+}
+
+/* Authentic Pterodactyl Top Navigation Bar */
+.pt-navbar {
+  background-color: #17202f;
+  border-bottom: 1px solid #233044;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.75rem;
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.pt-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.pt-brand-logo {
+  width: 38px;
+  height: 38px;
+  background: #1e88e5;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 0 16px rgba(30, 136, 229, 0.4);
+}
+
+.pt-brand-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+.pt-brand-sub {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.pt-nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+.pt-search-input {
+  background: #10141d;
+  border: 1px solid #233044;
+  border-radius: 6px;
+  padding: 0.45rem 0.85rem;
+  color: #e2e8f0;
+  font-size: 0.825rem;
+  width: 240px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.pt-search-input:focus {
+  border-color: #1e88e5;
+  box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.2);
+}
+
+.user-menu-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.pt-user-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: #10141d;
+  border: 1px solid #233044;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s;
+}
+
+.pt-user-badge:hover {
+  background: #17202f;
+  border-color: #3b82f6;
+}
+
+.pt-user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid #334155;
+  flex-shrink: 0;
+}
+
+.user-menu-chevron {
+  color: #94a3b8;
+  transition: transform 0.2s;
+}
+
+.user-menu-wrap.open .user-menu-chevron {
+  transform: rotate(180deg);
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 220px;
+  background: #17202f;
+  border: 1px solid #233044;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+.user-dropdown-header {
+  padding: 8px 10px;
+  border-bottom: 1px solid #233044;
+  margin-bottom: 4px;
+}
+
+.user-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.user-dropdown-item:hover {
+  background: #233044;
+  color: #ffffff;
+}
+
+.user-dropdown-item.text-danger {
+  color: #ef4444;
+}
+
+.user-dropdown-item.text-danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.user-dropdown-divider {
+  height: 1px;
+  background: #233044;
+  margin: 4px 0;
+}
+
+.pt-btn-admin-gear {
+  background: rgba(30, 136, 229, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(30, 136, 229, 0.3);
+  padding: 0.45rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s;
+}
+
+.pt-btn-admin-gear:hover {
+  background: #1e88e5;
+  color: white;
+}
+
+/* ==========================================================================
+   VIEW 1: AUTHENTIC PTERODACTYL LOGIN CARD
+   ========================================================================== */
+.login-view-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 20%, #17202f 0%, #10141d 80%);
+  padding: 1.5rem;
+}
+
+.login-card {
+  background: #17202f;
+  border: 1px solid #233044;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 440px;
+  padding: 2.25rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.login-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.login-logo {
+  width: 56px;
+  height: 56px;
+  background: #1e88e5;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 0 25px rgba(30, 136, 229, 0.5);
+}
+
+.login-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.login-subtitle {
+  font-size: 0.825rem;
+  color: #94a3b8;
+}
+
+.login-tabs {
+  display: flex;
+  background: #10141d;
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid #233044;
+  gap: 4px;
+}
+
+.login-tab-btn {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.login-tab-btn.active {
+  background: #1e88e5;
+  color: white;
+}
+
+.quick-login-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: rgba(16, 20, 29, 0.6);
+  border: 1px solid #233044;
+  border-radius: 8px;
+  padding: 0.85rem;
+}
+
+.quick-pill-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  background: #17202f;
+  border: 1px solid #233044;
+  border-radius: 6px;
+  color: #e2e8f0;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.quick-pill-btn:hover {
+  border-color: #1e88e5;
+  background: #1e293b;
+}
+
+/* ==========================================================================
+   VIEW 2: SERVER LIST DASHBOARD (PTERODACTYL GRID)
+   ========================================================================== */
+.server-list-view {
+  max-width: 1350px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.server-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.server-list-title h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.server-list-title p {
+  font-size: 0.825rem;
+  color: #94a3b8;
+}
+
+.server-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Authentic Pterodactyl Server Card */
+.pterodactyl-server-card {
+  background: #17202f;
+  border: 1px solid #233044;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.pterodactyl-server-card:hover {
+  transform: translateY(-2px);
+  border-color: #3b82f6;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 0 15px rgba(59, 130, 246, 0.15);
+}
+
+.server-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.server-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.server-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.server-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.server-egg-badge,
+.server-node-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: #10141d;
+  border: 1px solid #233044;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+/* Status Indicator Pill: "teks nya kecilin dikit terus bingkai nya buat agak melengkung" */
+.server-status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.server-status-indicator .status-circle {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.server-status-indicator.status-running {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  color: #4ade80;
+}
+
+.server-status-indicator.status-running .status-circle {
+  background: #22c55e;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.9);
+}
+
+.server-status-indicator.status-starting {
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.35);
+  color: #facc15;
+}
+
+.server-status-indicator.status-starting .status-circle {
+  background: #eab308;
+  box-shadow: 0 0 6px rgba(234, 179, 8, 0.9);
+}
+
+.server-status-indicator.status-offline {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #f87171;
+}
+
+.server-status-indicator.status-offline .status-circle {
+  background: #ef4444;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.9);
+}
+
+.server-address-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #10141d;
+  border: 1px solid #233044;
+  border-radius: 6px;
+  padding: 0.4rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+.server-address-icon {
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.server-address-text {
+  font-family: var(--font-mono);
+  color: #38bdf8;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.8rem;
+}
+
+.btn-copy-address {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.btn-copy-address:hover {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+}
+
+.server-gauges-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+  padding: 0.75rem;
+  background: #10141d;
+  border: 1px solid #233044;
+  border-radius: 8px;
+}
+
+.server-gauge-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.server-gauge-item .gauge-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.server-gauge-item .gauge-val {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.server-gauge-item .gauge-bar-track {
+  height: 4px;
+  background: #1e293b;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.server-gauge-item .gauge-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.gauge-bar-fill.fill-cpu { background: #3b82f6; }
+.gauge-bar-fill.fill-ram { background: #8b5cf6; }
+.gauge-bar-fill.fill-disk { background: #10b981; }
+
+.server-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.65rem;
+  border-top: 1px solid #233044;
+  gap: 0.5rem;
+}
+
+.server-id-tag {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.server-id-tag code {
+  color: #94a3b8;
+  font-family: var(--font-mono);
+}
+
+/* Manage Server button: "kasih ui" */
+.btn-manage-server {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+  border: 1px solid #3b82f6;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-manage-server:hover {
+  background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+  border-color: #60a5fa;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+}
+
+.btn-manage-server:active {
+  transform: translateY(0);
+}
+
+.pt-server-card {
+  background: #17202f;
+  border: 1px solid #233044;
+  border-radius: 10px;
+  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.pt-server-card:hover {
+  transform: translateY(-3px);
+  border-color: #1e88e5;
+  box-shadow: 0 10px 30px rgba(30, 136, 229, 0.15);
+}
+
+.pt-server-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #233044;
+  transition: background 0.2s ease;
+}
+
+.pt-server-card:hover::before {
+  background: #1e88e5;
+}
+
+.pt-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.pt-card-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pt-card-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pt-card-egg {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.pt-card-address {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: #38bdf8;
+  background: #10141d;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid #233044;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+}
+
+/* Mini Gauges in Server Card */
+.pt-card-gauges {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+  padding: 0.75rem;
+  background: #10141d;
+  border: 1px solid #233044;
+  border-radius: 8px;
+}
+
+.pt-mini-gauge {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pt-mini-gauge-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.pt-mini-gauge-val {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.pt-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+  border-top: 1px solid #233044;
+  font-size: 0.75rem;
+}
+
+.pt-card-node {
+  color: #94a3b8;
+}
+
+.pt-card-cta {
+  color: #1e88e5;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ==========================================================================
+   VIEW 3: SERVER MANAGEMENT BREADCRUMBS & TOP BAR
+   ========================================================================== */
+.server-view-breadcrumbs {
+  background: #10141d;
+  border-bottom: 1px solid #233044;
+  padding: 0.75rem 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.btn-breadcrumb-back {
+  background: transparent;
+  border: 1px solid #233044;
+  color: #94a3b8;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  transition: all 0.15s;
+}
+
+.btn-breadcrumb-back:hover {
+  background: #17202f;
+  border-color: #1e88e5;
+  color: white;
+}
+
+/* Sub-navigation bar */
+.pt-server-nav {
+  background: #17202f;
+  border-bottom: 1px solid #233044;
+  padding: 0 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  overflow-x: auto;
+}
+
+.pt-sub-tab {
+  padding: 0.85rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #94a3b8;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.pt-sub-tab:hover {
+  color: #ffffff;
+}
+
+.pt-sub-tab.active {
+  color: #1e88e5;
+  border-bottom-color: #1e88e5;
+}
+
+/* ==========================================================================
+   VIEW 4: PTERODACTYL ADMINISTRATION AREA
+   ========================================================================== */
+.admin-view-container {
+  min-height: calc(100vh - 64px);
+  background: #10141d;
+}
+
+.admin-header-bar {
+  background: #0f172a;
+  border-bottom: 1px solid #233044;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-header-title h1 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.admin-tabs-bar {
+  background: #17202f;
+  border-bottom: 1px solid #233044;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+}
+
+.admin-nav-tab {
+  padding: 0.85rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #94a3b8;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.admin-nav-tab:hover {
+  color: #ffffff;
+}
+
+.admin-nav-tab.active {
+  color: #1e88e5;
+  border-bottom-color: #1e88e5;
+}
+
+.admin-main-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.admin-tab-pane {
+  display: none;
+}
+.admin-tab-pane.active {
+  display: block;
+}
+
+/* Admin Metric Cards Grid */
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.admin-stat-card {
+  background: #17202f;
+  border: 1px solid #233044;
+  border-radius: 10px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-stat-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.admin-stat-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.05em;
+}
+
+.admin-stat-sub {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* Admin Data Table */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #17202f;
+  border: 1px solid #233044;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.admin-table th {
+  background: #10141d;
+  padding: 0.85rem 1.25rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  text-align: left;
+  border-bottom: 1px solid #233044;
+}
+
+.admin-table td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #1a2537;
+  font-size: 0.85rem;
+  vertical-align: middle;
+}
+
+.admin-table tr:hover td {
+  background-color: #1a2537;
+}
+
+/* ==========================================================================
+   BRAND ATTRIBUTION & FOOTER STYLING (by AllxdDev)
+   ========================================================================== */
+.login-badge-author {
+  display: inline-block;
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 9999px;
+  padding: 0.2rem 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.login-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #1a2537;
+  text-align: center;
+}
+
+.pt-footer {
+  width: 100%;
+  text-align: center;
+  padding: 2rem 1rem;
+  margin-top: 2rem;
+  font-size: 0.75rem;
+  color: #64748b;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  letter-spacing: 0.02em;
+}
+
+.pt-brand-logo svg,
+.login-logo svg {
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.pt-brand:hover .pt-brand-logo svg {
+  transform: scale(1.08);
+}
+
+.login-card:hover .login-logo svg {
+  transform: scale(1.06);
+}
+
+

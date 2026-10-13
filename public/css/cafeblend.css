@@ -1,0 +1,696 @@
+/* ==========================================================================
+   CafeBlend Design System
+   A cozy, coffee-toned design system with warm neumorphic elevation.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&family=Work+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Colors */
+  --cb-primary: #8B5E3C;
+  --cb-primary-hover: #6B4226;
+  --cb-secondary: #C4956A;
+  --cb-secondary-hover: #B58458;
+  --cb-tertiary: #FDF6EC;
+  --cb-bg: #FDF6EC;
+  --cb-surface: #FFFFFF;
+  --cb-surface-inset: #F0E6D6;
+  --cb-surface-inset-hover: #EBE0D0;
+  --cb-border-subtle: #E8DDD0;
+  --cb-text-headline: #3E2723;
+  --cb-text-body: #5D4037;
+  --cb-text-muted: #8D6E63;
+  --cb-text-light: #FFFFFF;
+
+  /* Status Colors */
+  --cb-success: #059669;
+  --cb-success-bg: #DCFCE7;
+  --cb-warning: #D97706;
+  --cb-warning-bg: #FEF3C7;
+  --cb-error: #EF4444;
+  --cb-error-hover: #DC2626;
+  --cb-error-bg: #FEE2E2;
+  --cb-info: #6366F1;
+  --cb-info-bg: #EDE9FE;
+
+  /* Typography */
+  --cb-font-headline: 'DM Serif Display', Georgia, serif;
+  --cb-font-body: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --cb-font-mono: 'IBM Plex Mono', SFMono-Regular, Consolas, monospace;
+
+  /* Spacing */
+  --cb-space-xs: 4px;
+  --cb-space-sm: 8px;
+  --cb-space-md: 16px;
+  --cb-space-lg: 24px;
+  --cb-space-xl: 32px;
+  --cb-space-2xl: 48px;
+  --cb-space-3xl: 64px;
+
+  /* Border Radius */
+  --cb-radius-none: 0px;
+  --cb-radius-sm: 6px;
+  --cb-radius-md: 12px;
+  --cb-radius-lg: 16px;
+  --cb-radius-full: 9999px;
+
+  /* Elevation (Neumorphic Warm Shadows) */
+  --cb-shadow-raised: 6px 6px 12px #D5C9B8, -6px -6px 12px #FFFFFF;
+  --cb-shadow-raised-hover: 8px 8px 16px #C8BCAB, -8px -8px 16px #FFFFFF;
+  --cb-shadow-raised-sm: 3px 3px 6px #D5C9B8, -3px -3px 6px #FFFFFF;
+  --cb-shadow-inset: inset 4px 4px 8px #D5C9B8, inset -4px -4px 8px #FFFFFF;
+  --cb-shadow-inset-sm: inset 2px 2px 4px #D5C9B8, inset -2px -2px 4px #FFFFFF;
+  --cb-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+  --cb-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --cb-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --cb-shadow-focus: 0 0 0 3px rgba(139, 94, 60, 0.25);
+}
+
+/* ==========================================================================
+   Base & Reset on CafeBlend Background
+   ========================================================================== */
+.cafeblend-body,
+body.theme-cafeblend {
+  background-color: var(--cb-bg);
+  color: var(--cb-text-body);
+  font-family: var(--cb-font-body);
+  font-size: 14px;
+  line-height: 22px;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Typography Hierarchy */
+.cb-h1, h1.cb-title {
+  font-family: var(--cb-font-headline);
+  font-size: 34px;
+  line-height: 42px;
+  font-weight: 400;
+  color: var(--cb-text-headline);
+  margin-top: 0;
+  margin-bottom: var(--cb-space-md);
+}
+
+.cb-h2, h2.cb-title {
+  font-family: var(--cb-font-headline);
+  font-size: 26px;
+  line-height: 34px;
+  font-weight: 400;
+  color: var(--cb-text-headline);
+  margin-top: 0;
+  margin-bottom: var(--cb-space-md);
+}
+
+.cb-h3, h3.cb-title {
+  font-family: var(--cb-font-headline);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 400;
+  color: var(--cb-text-headline);
+  margin-top: 0;
+  margin-bottom: var(--cb-space-sm);
+}
+
+.cb-h4, h4.cb-title {
+  font-family: var(--cb-font-body);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  color: var(--cb-primary);
+  margin-top: 0;
+  margin-bottom: var(--cb-space-xs);
+}
+
+.cb-body {
+  font-family: var(--cb-font-body);
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--cb-text-body);
+}
+
+.cb-small {
+  font-family: var(--cb-font-body);
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--cb-text-muted);
+}
+
+.cb-mono {
+  font-family: var(--cb-font-mono);
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--cb-primary);
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.cb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--cb-space-sm);
+  font-family: var(--cb-font-body);
+  font-weight: 500;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--cb-radius-md);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--cb-shadow-raised);
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.cb-btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: var(--cb-shadow-inset-sm);
+}
+
+.cb-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--cb-shadow-raised), var(--cb-shadow-focus);
+}
+
+/* Button Variants */
+.cb-btn-primary {
+  background-color: var(--cb-primary);
+  color: var(--cb-text-light);
+}
+
+.cb-btn-primary:hover:not(:disabled) {
+  background-color: var(--cb-primary-hover);
+  box-shadow: var(--cb-shadow-raised-hover);
+}
+
+.cb-btn-secondary {
+  background-color: #FAF0E1;
+  color: var(--cb-primary);
+}
+
+.cb-btn-secondary:hover:not(:disabled) {
+  background-color: #F5E8D4;
+  box-shadow: var(--cb-shadow-raised-hover);
+}
+
+.cb-btn-ghost {
+  background-color: transparent;
+  color: #6D4C41;
+  box-shadow: none;
+}
+
+.cb-btn-ghost:hover:not(:disabled) {
+  background-color: #FAF0E1;
+  box-shadow: var(--cb-shadow-sm);
+}
+
+.cb-btn-destructive {
+  background-color: var(--cb-error);
+  color: var(--cb-text-light);
+}
+
+.cb-btn-destructive:hover:not(:disabled) {
+  background-color: var(--cb-error-hover);
+  box-shadow: var(--cb-shadow-raised-hover);
+}
+
+/* Button Sizes */
+.cb-btn-sm {
+  padding: 6px 14px;
+  font-size: 12px;
+  min-height: 34px;
+  border-radius: var(--cb-radius-sm);
+}
+
+.cb-btn-md {
+  padding: 8px 18px;
+  font-size: 14px;
+  min-height: 42px;
+  border-radius: var(--cb-radius-md);
+}
+
+.cb-btn-lg {
+  padding: 10px 24px;
+  font-size: 16px;
+  min-height: 50px;
+  border-radius: var(--cb-radius-lg);
+}
+
+.cb-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* ==========================================================================
+   Cards
+   ========================================================================== */
+.cb-card {
+  background-color: var(--cb-surface);
+  border: none;
+  border-radius: var(--cb-radius-md);
+  padding: var(--cb-space-lg);
+  box-shadow: var(--cb-shadow-raised);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.cb-card-elevated {
+  background-color: var(--cb-surface);
+  border: none;
+  border-radius: var(--cb-radius-md);
+  padding: var(--cb-space-lg);
+  box-shadow: var(--cb-shadow-md);
+}
+
+.cb-card-interactive {
+  cursor: pointer;
+}
+
+.cb-card-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--cb-shadow-raised-hover);
+}
+
+.cb-card-image {
+  margin: calc(-1 * var(--cb-space-lg)) calc(-1 * var(--cb-space-lg)) var(--cb-space-md) calc(-1 * var(--cb-space-lg));
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  height: 180px;
+}
+
+.cb-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.cb-card-interactive:hover .cb-card-image img {
+  transform: scale(1.03);
+}
+
+/* ==========================================================================
+   Inputs & Form Controls
+   ========================================================================== */
+.cb-form-group {
+  margin-bottom: var(--cb-space-md);
+  display: flex;
+  flex-direction: column;
+}
+
+.cb-label {
+  font-family: var(--cb-font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--cb-primary);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.cb-input,
+.cb-textarea,
+.cb-select {
+  height: 42px;
+  padding: 10px 14px;
+  border-radius: var(--cb-radius-md);
+  border: none;
+  background-color: var(--cb-surface-inset);
+  box-shadow: var(--cb-shadow-inset);
+  font-family: var(--cb-font-body);
+  font-size: 14px;
+  color: var(--cb-text-dark);
+  box-sizing: border-box;
+  width: 100%;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cb-textarea {
+  height: auto;
+  min-height: 84px;
+  resize: vertical;
+}
+
+.cb-input::placeholder,
+.cb-textarea::placeholder {
+  color: #A1887F;
+}
+
+.cb-input:hover:not(:disabled),
+.cb-textarea:hover:not(:disabled),
+.cb-select:hover:not(:disabled) {
+  background-color: var(--cb-surface-inset-hover);
+  box-shadow: var(--cb-shadow-inset);
+}
+
+.cb-input:focus,
+.cb-textarea:focus,
+.cb-select:focus {
+  outline: none;
+  background-color: var(--cb-surface-inset);
+  box-shadow: var(--cb-shadow-inset), var(--cb-shadow-focus);
+}
+
+.cb-input.cb-input-error,
+.cb-textarea.cb-input-error {
+  border: 1px solid var(--cb-error);
+  background-color: #FEF2F2;
+  box-shadow: none;
+}
+
+.cb-input:disabled,
+.cb-textarea:disabled,
+.cb-select:disabled {
+  background-color: #F5EDE3;
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.cb-helper-text {
+  font-family: var(--cb-font-body);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--cb-text-muted);
+  margin-top: 4px;
+}
+
+.cb-helper-error {
+  color: var(--cb-error);
+}
+
+/* ==========================================================================
+   Chips & Badges
+   ========================================================================== */
+.cb-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--cb-space-xs);
+  padding: 6px 14px;
+  font-family: var(--cb-font-body);
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: var(--cb-radius-full);
+  border: none;
+  text-decoration: none;
+  user-select: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+/* Filter Chip */
+.cb-chip-filter {
+  background-color: #FAF0E1;
+  color: var(--cb-primary);
+  box-shadow: var(--cb-shadow-raised-sm);
+}
+
+.cb-chip-filter:hover {
+  background-color: #F5E8D4;
+}
+
+.cb-chip-filter.active {
+  background-color: var(--cb-primary);
+  color: var(--cb-text-light);
+  box-shadow: var(--cb-shadow-inset-sm);
+}
+
+/* Status Chips */
+.cb-chip-status {
+  cursor: default;
+  font-weight: 600;
+  padding: 4px 10px;
+}
+
+.cb-chip-available {
+  background-color: var(--cb-success-bg);
+  color: var(--cb-success);
+}
+
+.cb-chip-limited {
+  background-color: var(--cb-warning-bg);
+  color: var(--cb-warning);
+}
+
+.cb-chip-soldout {
+  background-color: var(--cb-error-bg);
+  color: var(--cb-error);
+}
+
+.cb-chip-seasonal {
+  background-color: var(--cb-info-bg);
+  color: var(--cb-info);
+}
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+.cb-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-radius: var(--cb-radius-md);
+  background-color: var(--cb-surface);
+  box-shadow: var(--cb-shadow-raised);
+  overflow: hidden;
+}
+
+.cb-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 52px;
+  padding: 12px 16px;
+  font-family: var(--cb-font-body);
+  font-size: 14px;
+  color: var(--cb-text-dark);
+  border-bottom: 1px solid var(--cb-border-subtle);
+  transition: background-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.cb-list-item:last-child {
+  border-bottom: none;
+}
+
+.cb-list-item:hover {
+  background-color: #FAF0E1;
+  cursor: pointer;
+}
+
+.cb-list-item.selected {
+  background-color: var(--cb-surface-inset);
+  border-left: 3px solid var(--cb-primary);
+}
+
+/* ==========================================================================
+   Checkboxes & Radio Buttons
+   ========================================================================== */
+.cb-control-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cb-space-sm);
+  font-family: var(--cb-font-body);
+  font-size: 14px;
+  color: var(--cb-text-body);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Checkbox */
+.cb-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--cb-radius-sm);
+  background-color: var(--cb-surface-inset);
+  box-shadow: var(--cb-shadow-inset-sm);
+  display: inline-grid;
+  place-content: center;
+  margin: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.cb-checkbox:checked {
+  background-color: var(--cb-primary);
+  box-shadow: var(--cb-shadow-raised-sm);
+}
+
+.cb-checkbox:checked::before {
+  content: "";
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid #FFFFFF;
+  border-bottom: 2px solid #FFFFFF;
+  transform: rotate(-45deg) translate(1px, -1px);
+}
+
+.cb-checkbox:indeterminate {
+  background-color: var(--cb-primary);
+  box-shadow: var(--cb-shadow-raised-sm);
+}
+
+.cb-checkbox:indeterminate::before {
+  content: "";
+  width: 8px;
+  height: 2px;
+  background-color: #FFFFFF;
+}
+
+.cb-checkbox:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Radio Button */
+.cb-radio {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--cb-radius-full);
+  background-color: var(--cb-surface-inset);
+  box-shadow: var(--cb-shadow-inset-sm);
+  display: inline-grid;
+  place-content: center;
+  margin: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cb-radio:checked {
+  border: 2px solid var(--cb-primary);
+  background-color: var(--cb-surface-inset);
+  box-shadow: var(--cb-shadow-raised-sm);
+}
+
+.cb-radio:checked::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--cb-primary);
+}
+
+.cb-radio:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Tooltips
+   ========================================================================== */
+.cb-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.cb-tooltip .cb-tooltip-text {
+  visibility: hidden;
+  background-color: #3E2723;
+  color: #FFFFFF;
+  font-family: var(--cb-font-body);
+  font-size: 12px;
+  text-align: center;
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: var(--cb-shadow-md);
+  position: absolute;
+  z-index: 1000;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 220px;
+  white-space: normal;
+  opacity: 0;
+  transition: opacity 0.2s, visibility 0.2s;
+  pointer-events: none;
+}
+
+.cb-tooltip .cb-tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -6px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: #3E2723 transparent transparent transparent;
+}
+
+.cb-tooltip:hover .cb-tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Modals & Panels
+   ========================================================================== */
+.cb-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(62, 39, 35, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: var(--cb-space-md);
+}
+
+.cb-modal {
+  background-color: var(--cb-surface);
+  border-radius: var(--cb-radius-lg);
+  box-shadow: var(--cb-shadow-lg);
+  max-width: 520px;
+  width: 100%;
+  padding: var(--cb-space-xl);
+  box-sizing: border-box;
+  animation: cbPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cbPopIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ==========================================================================
+   Layout Helpers
+   ========================================================================== */
+.cb-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--cb-space-lg);
+}
+
+.cb-grid {
+  display: grid;
+  gap: var(--cb-space-lg);
+}
+
+.cb-grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.cb-grid-3 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.cb-grid-4 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+.cb-flex { display: flex; }
+.cb-flex-col { display: flex; flex-direction: column; }
+.cb-items-center { align-items: center; }
+.cb-justify-between { justify-content: space-between; }
+.cb-gap-xs { gap: var(--cb-space-xs); }
+.cb-gap-sm { gap: var(--cb-space-sm); }
+.cb-gap-md { gap: var(--cb-space-md); }
+.cb-gap-lg { gap: var(--cb-space-lg); }
+
+.cb-section {
+  padding: var(--cb-space-2xl) 0;
+}

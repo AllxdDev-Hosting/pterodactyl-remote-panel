@@ -111,11 +111,11 @@ class ScheduleController {
   }
 
   async promptCreate() {
-    const name = prompt('Schedule Name (e.g. Daily Restart):');
+    const name = await (window.dialog ? window.dialog.prompt('Schedule Name (e.g. Daily Restart):', '', 'Create Schedule') : prompt('Schedule Name (e.g. Daily Restart):'));
     if (!name || !name.trim()) return;
 
-    const minute = prompt('Cron Minute (*, 0, */5):', '0') || '*';
-    const hour = prompt('Cron Hour (*, 0, 4):', '4') || '*';
+    const minute = await (window.dialog ? window.dialog.prompt('Cron Minute (*, 0, */5):', '0', 'Schedule Minute') : prompt('Cron Minute (*, 0, */5):', '0')) || '*';
+    const hour = await (window.dialog ? window.dialog.prompt('Cron Hour (*, 0, 4):', '4', 'Schedule Hour') : prompt('Cron Hour (*, 0, 4):', '4')) || '*';
 
     const data = {
       name: name.trim(),
@@ -149,7 +149,8 @@ class ScheduleController {
   }
 
   async deleteSchedule(scheduleId) {
-    if (!confirm('Are you sure you want to delete this schedule?')) return;
+    const confirmed = await (window.dialog ? window.dialog.confirm('Are you sure you want to delete this schedule?', 'Delete Schedule', true) : confirm('Are you sure you want to delete this schedule?'));
+    if (!confirmed) return;
 
     try {
       await this.api.deleteSchedule(this.currentServerId, scheduleId);

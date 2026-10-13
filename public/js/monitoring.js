@@ -56,6 +56,18 @@ class MonitoringController {
       return;
     }
 
+    const isCafe = document.body.classList.contains('theme-cafeblend');
+    const cpuColor = isCafe ? '#8B5E3C' : '#3b82f6';
+    const ramColor = isCafe ? '#C4956A' : '#10b981';
+    const netRxColor = isCafe ? '#8B5E3C' : '#06b6d4';
+    const netTxColor = isCafe ? '#C4956A' : '#8b5cf6';
+    const gridColor = isCafe ? 'rgba(139, 94, 60, 0.08)' : 'rgba(255, 255, 255, 0.05)';
+    const tickColor = isCafe ? '#8D6E63' : '#64748b';
+    const tooltipBg = isCafe ? '#3E2723' : 'rgba(15, 23, 42, 0.9)';
+    const tooltipTitle = isCafe ? '#FAF0E1' : '#94a3b8';
+    const tooltipBody = isCafe ? '#FFFFFF' : '#f8fafc';
+    const tooltipBorder = isCafe ? '#C4956A' : '#1e293b';
+
     const commonOptions = {
       responsive: true,
       maintainAspectRatio: false,
@@ -69,10 +81,10 @@ class MonitoringController {
         tooltip: {
           mode: 'index',
           intersect: false,
-          backgroundColor: 'rgba(15, 23, 42, 0.9)',
-          titleColor: '#94a3b8',
-          bodyColor: '#f8fafc',
-          borderColor: '#1e293b',
+          backgroundColor: tooltipBg,
+          titleColor: tooltipTitle,
+          bodyColor: tooltipBody,
+          borderColor: tooltipBorder,
           borderWidth: 1
         }
       },
@@ -81,10 +93,10 @@ class MonitoringController {
           display: false
         },
         y: {
-          grid: { color: 'rgba(255, 255, 255, 0.05)' },
+          grid: { color: gridColor },
           ticks: {
-            color: '#64748b',
-            font: { size: 10, family: "'JetBrains Mono', monospace" }
+            color: tickColor,
+            font: { size: 10, family: "'IBM Plex Mono', 'JetBrains Mono', monospace" }
           }
         }
       }
@@ -95,8 +107,8 @@ class MonitoringController {
     if (cpuCanvas) {
       const ctx = cpuCanvas.getContext('2d');
       const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-      gradient.addColorStop(0, 'rgba(59, 130, 246, 0.35)');
-      gradient.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
+      gradient.addColorStop(0, isCafe ? 'rgba(139, 94, 60, 0.35)' : 'rgba(59, 130, 246, 0.35)');
+      gradient.addColorStop(1, isCafe ? 'rgba(139, 94, 60, 0.0)' : 'rgba(59, 130, 246, 0.0)');
 
       this.charts.cpu = new window.Chart(cpuCanvas, {
         type: 'line',
@@ -105,7 +117,7 @@ class MonitoringController {
           datasets: [{
             label: 'CPU Usage (%)',
             data: Array(this.maxPoints).fill(0),
-            borderColor: '#3b82f6',
+            borderColor: cpuColor,
             backgroundColor: gradient,
             fill: true
           }]
@@ -132,8 +144,8 @@ class MonitoringController {
     if (ramCanvas) {
       const ctx = ramCanvas.getContext('2d');
       const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-      gradient.addColorStop(0, 'rgba(16, 185, 129, 0.35)');
-      gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+      gradient.addColorStop(0, isCafe ? 'rgba(196, 149, 106, 0.35)' : 'rgba(16, 185, 129, 0.35)');
+      gradient.addColorStop(1, isCafe ? 'rgba(196, 149, 106, 0.0)' : 'rgba(16, 185, 129, 0.0)');
 
       this.charts.memory = new window.Chart(ramCanvas, {
         type: 'line',
@@ -142,7 +154,7 @@ class MonitoringController {
           datasets: [{
             label: 'Memory (MB)',
             data: Array(this.maxPoints).fill(0),
-            borderColor: '#10b981',
+            borderColor: ramColor,
             backgroundColor: gradient,
             fill: true
           }]
@@ -175,14 +187,14 @@ class MonitoringController {
             {
               label: 'Inbound Rx (KB/s)',
               data: Array(this.maxPoints).fill(0),
-              borderColor: '#06b6d4',
+              borderColor: netRxColor,
               backgroundColor: 'transparent',
               borderWidth: 2
             },
             {
               label: 'Outbound Tx (KB/s)',
               data: Array(this.maxPoints).fill(0),
-              borderColor: '#8b5cf6',
+              borderColor: netTxColor,
               backgroundColor: 'transparent',
               borderWidth: 2
             }
@@ -195,7 +207,7 @@ class MonitoringController {
             legend: {
               display: true,
               labels: {
-                color: '#94a3b8',
+                color: tickColor,
                 boxWidth: 12,
                 font: { size: 11 }
               }
@@ -215,6 +227,13 @@ class MonitoringController {
         }
       });
     }
+  }
+
+  updateTheme(themeName) {
+    if (this.charts.cpu) this.charts.cpu.destroy();
+    if (this.charts.memory) this.charts.memory.destroy();
+    if (this.charts.network) this.charts.network.destroy();
+    this.initCharts();
   }
 
   setServerLimits(memoryMb, diskMb) {

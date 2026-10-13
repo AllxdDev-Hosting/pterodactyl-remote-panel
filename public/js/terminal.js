@@ -13,7 +13,7 @@ class TerminalController {
     this.webLinksAddon = null;
     
     // Command history
-    this.history = JSON.parse(localStorage.getItem('pt_cmd_history') || '[]');
+    this.history = [];
     this.historyIndex = this.history.length;
     
     // Auto scroll state
@@ -32,38 +32,63 @@ class TerminalController {
       return;
     }
 
+    const isCafe = document.body.classList.contains('theme-cafeblend');
+    const termTheme = isCafe ? {
+      background: '#201610',
+      foreground: '#FDF6EC',
+      cursor: '#C4956A',
+      cursorAccent: '#201610',
+      selectionBackground: 'rgba(196, 149, 106, 0.35)',
+      black: '#3E2723',
+      red: '#EF4444',
+      green: '#10B981',
+      yellow: '#F59E0B',
+      blue: '#C4956A',
+      magenta: '#A855F7',
+      cyan: '#8B5E3C',
+      white: '#FDF6EC',
+      brightBlack: '#6B5B52',
+      brightRed: '#F87171',
+      brightGreen: '#34D399',
+      brightYellow: '#FBBF24',
+      brightBlue: '#D4A373',
+      brightMagenta: '#C084FC',
+      brightCyan: '#A06D48',
+      brightWhite: '#FFFFFF'
+    } : {
+      background: '#050811',
+      foreground: '#cbd5e1',
+      cursor: '#06b6d4',
+      cursorAccent: '#050811',
+      selectionBackground: 'rgba(59, 130, 246, 0.35)',
+      black: '#1e293b',
+      red: '#f87171',
+      green: '#4ade80',
+      yellow: '#facc15',
+      blue: '#60a5fa',
+      magenta: '#c084fc',
+      cyan: '#22d3ee',
+      white: '#f8fafc',
+      brightBlack: '#475569',
+      brightRed: '#ef4444',
+      brightGreen: '#22c55e',
+      brightYellow: '#eab308',
+      brightBlue: '#3b82f6',
+      brightMagenta: '#a855f7',
+      brightCyan: '#06b6d4',
+      brightWhite: '#ffffff'
+    };
+
     this.term = new TerminalClass({
       cursorBlink: true,
       cursorStyle: 'bar',
       fontSize: 13,
-      fontFamily: "'JetBrains Mono', 'Fira Code', 'Consolas', monospace",
+      fontFamily: "'IBM Plex Mono', 'JetBrains Mono', 'Fira Code', 'Consolas', monospace",
       lineHeight: 1.25,
       scrollback: 5000,
       disableStdin: false,
       convertEol: true,
-      theme: {
-        background: '#050811',
-        foreground: '#cbd5e1',
-        cursor: '#06b6d4',
-        cursorAccent: '#050811',
-        selectionBackground: 'rgba(59, 130, 246, 0.35)',
-        black: '#1e293b',
-        red: '#f87171',
-        green: '#4ade80',
-        yellow: '#facc15',
-        blue: '#60a5fa',
-        magenta: '#c084fc',
-        cyan: '#22d3ee',
-        white: '#f8fafc',
-        brightBlack: '#475569',
-        brightRed: '#ef4444',
-        brightGreen: '#22c55e',
-        brightYellow: '#eab308',
-        brightBlue: '#3b82f6',
-        brightMagenta: '#a855f7',
-        brightCyan: '#06b6d4',
-        brightWhite: '#ffffff'
-      }
+      theme: termTheme
     });
 
     // Addons
@@ -166,7 +191,6 @@ class TerminalController {
     if (this.history[this.history.length - 1] !== cmd) {
       this.history.push(cmd);
       if (this.history.length > 50) this.history.shift();
-      localStorage.setItem('pt_cmd_history', JSON.stringify(this.history));
     }
     this.historyIndex = this.history.length;
   }
@@ -186,6 +210,59 @@ class TerminalController {
     }
     this.historyIndex = this.history.length;
     return '';
+  }
+
+  updateTheme(themeName) {
+    if (!this.term) return;
+    if (themeName === 'cafeblend') {
+      this.term.options.theme = {
+        background: '#201610',
+        foreground: '#FDF6EC',
+        cursor: '#C4956A',
+        cursorAccent: '#201610',
+        selectionBackground: 'rgba(196, 149, 106, 0.35)',
+        black: '#3E2723',
+        red: '#EF4444',
+        green: '#10B981',
+        yellow: '#F59E0B',
+        blue: '#C4956A',
+        magenta: '#A855F7',
+        cyan: '#8B5E3C',
+        white: '#FDF6EC',
+        brightBlack: '#6B5B52',
+        brightRed: '#F87171',
+        brightGreen: '#34D399',
+        brightYellow: '#FBBF24',
+        brightBlue: '#D4A373',
+        brightMagenta: '#C084FC',
+        brightCyan: '#A06D48',
+        brightWhite: '#FFFFFF'
+      };
+    } else {
+      this.term.options.theme = {
+        background: '#050811',
+        foreground: '#cbd5e1',
+        cursor: '#06b6d4',
+        cursorAccent: '#050811',
+        selectionBackground: 'rgba(59, 130, 246, 0.35)',
+        black: '#1e293b',
+        red: '#f87171',
+        green: '#4ade80',
+        yellow: '#facc15',
+        blue: '#60a5fa',
+        magenta: '#c084fc',
+        cyan: '#22d3ee',
+        white: '#f8fafc',
+        brightBlack: '#475569',
+        brightRed: '#ef4444',
+        brightGreen: '#22c55e',
+        brightYellow: '#eab308',
+        brightBlue: '#3b82f6',
+        brightMagenta: '#a855f7',
+        brightCyan: '#06b6d4',
+        brightWhite: '#ffffff'
+      };
+    }
   }
 }
 
