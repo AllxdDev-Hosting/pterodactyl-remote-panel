@@ -6,7 +6,7 @@
 [![Security](https://img.shields.io/badge/Security-AES--256--GCM-red.svg)](#-arsitektur--keamanan)
 [![Author](https://img.shields.io/badge/Author-AllxdDev-cyan.svg)](https://github.com/AllxdDev)
 
-**Pterodactyl Remote Client Panel** adalah dashboard web alternatif mandiri (*remote client panel*) berbasis **Node.js Express** dan **Single Page Application (SPA)** yang memungkinkan pengguna mengelola server Pterodactyl mereka secara cepat, aman, dan langsung menggunakan **Personal Client API Key**.
+**Pterodactyl Remote Client Panel** adalah dashboard web alternatif mandiri (_remote client panel_) berbasis **Node.js Express** dan **Single Page Application (SPA)** yang memungkinkan pengguna mengelola server Pterodactyl mereka secara cepat, aman, dan langsung menggunakan **Personal Client API Key**.
 
 Aplikasi ini didesain dengan arsitektur **Stateless & Zero-Database**, sehingga dapat dijalankan baik di server lokal (Node.js) maupun dideploy langsung ke platform cloud serverless seperti **Vercel** tanpa memerlukan database terpisah.
 
@@ -30,20 +30,20 @@ Aplikasi ini didesain dengan arsitektur **Stateless & Zero-Database**, sehingga 
 ## ✨ Fitur Utama
 
 - **Otentikasi Mandiri per Pengguna**:
-  - Login menggunakan **Client API Key** pribadi dari panel utama (menu *Account Settings → API Credentials*).
+  - Login menggunakan **Client API Key** pribadi dari panel utama (menu _Account Settings → API Credentials_).
   - Tidak menyimpan database akun atau kata sandi; hak akses server mengikuti izin akun Pterodactyl masing-masing.
 - **Konsol Realtime & Wings WebSocket**:
   - Menghubungkan terminal xterm.js langsung ke daemon Wings via koneksi aman WSS (`wss://`).
   - Eksekusi perintah server instan dan streaming log real-time.
 - **Kontrol Daya Server Penuh**:
-  - *Start*, *Restart*, *Stop (Graceful)*, dan *Kill (Force Terminate)*.
+  - _Start_, _Restart_, _Stop (Graceful)_, dan _Kill (Force Terminate)_.
 - **Monitoring Telemetry Live**:
   - Grafik utilisasi CPU, Memory (RAM), Disk Space, dan Network I/O dengan polling statistik aktif.
 - **File Manager Lengkap**:
   - Navigasi folder & file server.
   - Editor teks bawaan dengan modal penampil berkas.
   - Pembuatan file baru, pembuatan folder, ganti nama (rename), ubah permissions (chmod), kompres (zip/tar), dan ekstrak (unarchive).
-  - Unggah (upload) dan unduh (download) file langsung menggunakan URL bertanda tangan aman (*signed URLs*) dari Wings.
+  - Unggah (upload) dan unduh (download) file langsung menggunakan URL bertanda tangan aman (_signed URLs_) dari Wings.
 - **Manajemen Database**:
   - Melihat kredensial database server, host koneksi, dan port.
   - Fitur rotasi password database dan pembuatan database baru sesuai batas alokasi.
@@ -52,7 +52,7 @@ Aplikasi ini didesain dengan arsitektur **Stateless & Zero-Database**, sehingga 
   - Unduh backup via signed URL, restore ke server, mengunci (lock) backup, dan hapus backup.
 - **Jadwal Otomatis (Schedules / Cron)**:
   - Membuat dan mengatur tugas cron otomatis (backup rutin, power toggle, perintah konsol).
-  - Memicu eksekusi jadwal secara manual (*trigger now*).
+  - Memicu eksekusi jadwal secara manual (_trigger now_).
 - **Alokasi Jaringan & Subuser**:
   - Melihat IP/port alokasi server dan daftar subuser yang memiliki akses ke server.
 
@@ -89,27 +89,30 @@ Aplikasi ini dibangun dengan standar keamanan ketat:
 
 Buat file `.env` di root direktori proyek (gunakan `.env.example` sebagai referensi):
 
-| Variabel | Tipe | Wajib | Keterangan | Default |
-| :--- | :--- | :--- | :--- | :--- |
-| `SESSION_SECRET` | String | **Ya** | Kunci rahasia minimal 32 byte (64 karakter hex) untuk enkripsi sesi AES-256-GCM. | *Wajib diisi sendiri* |
-| `PTERODACTYL_URL` | URL | **Ya** | URL panel Pterodactyl upstream (wajib format HTTPS tanpa slash akhir). | `https://panel.allxddev.com` |
-| `PORT` | Number | Tidak | Port listener server Express lokal. | `3000` |
+| Variabel          | Tipe   | Wajib  | Keterangan                                                                       | Default                      |
+| :---------------- | :----- | :----- | :------------------------------------------------------------------------------- | :--------------------------- |
+| `SESSION_SECRET`  | String | **Ya** | Kunci rahasia minimal 32 byte (64 karakter hex) untuk enkripsi sesi AES-256-GCM. | _Wajib diisi sendiri_        |
+| `PTERODACTYL_URL` | URL    | **Ya** | URL panel Pterodactyl upstream (wajib format HTTPS tanpa slash akhir).           | `https://panel.allxddev.com` |
+| `PORT`            | Number | Tidak  | Port listener server Express lokal.                                              | `3000`                       |
 
 ### Cara Membuat `SESSION_SECRET` yang Aman:
 
 Jalankan salah satu perintah berikut di terminal Anda:
 
 **Menggunakan Node.js:**
+
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
 **Menggunakan PowerShell:**
+
 ```powershell
 [BitConverter]::ToString([Security.Cryptography.RandomNumberGenerator]::Create().GetBytes(32)).Replace("-","").ToLower()
 ```
 
 **Menggunakan OpenSSL / Linux Bash:**
+
 ```bash
 openssl rand -hex 32
 ```
@@ -119,28 +122,35 @@ openssl rand -hex 32
 ## 🚀 Instalasi & Penggunaan Lokal
 
 1. **Clone repository ini:**
+
    ```bash
    git clone https://github.com/AllxdDev-Hosting/pterodactyl-remote-panel.git
    cd pterodactyl-remote-panel
    ```
 
 2. **Install dependensi:**
+
    ```bash
    npm ci
    ```
 
 3. **Konfigurasi file `.env`:**
    Salin file contoh konfigurasi dan edit nilainya:
+
    ```bash
    cp .env.example .env
    ```
+
    Isi `SESSION_SECRET` dan sesuaikan `PTERODACTYL_URL` dengan panel Anda.
 
 4. **Jalankan server aplikasi:**
+
    ```bash
    npm start
    ```
+
    Atau untuk mode pengembangan:
+
    ```bash
    node server.js
    ```
@@ -155,24 +165,27 @@ openssl rand -hex 32
 Semua kebutuhan Pterodactyl Panel (Fitur PLTC, Ganti Domain tanpa reinstall, dan Migrasi VPS tanpa hapus data) disatukan dalam **1 URL / 1 Script**:
 
 ### 🔹 Via Raw GitHub:
+
 ```bash
 bash <(curl -sSL https://raw.githubusercontent.com/AllxdDev-Hosting/pterodactyl-remote-panel/main/instalinvps/installer.sh)
 ```
 
 **Atau menggunakan pipe langsung:**
+
 ```bash
 curl -sSL https://raw.githubusercontent.com/AllxdDev-Hosting/pterodactyl-remote-panel/main/instalinvps/installer.sh | bash
 ```
 
 > **🔑 License Key:** `AllxdClint`  
 > **📋 Fitur yang Tersedia dalam 1 URL Ini:**
+>
 > 1. **Pasang Fitur PLTC ke Dashboard** (Floating 1-Click Copy & ID Whitelist).
 > 2. **Manajemen User ID** (User ID 1 otomatis aktif, tambah & hapus ID izin).
 > 3. **Ganti / Ubah Domain Panel** (Tanpa reinstall, otomatis update Nginx, SSL Certbot, & Wings).
 > 4. **Migrasi VPS (Pindah VPS)** (Export/Import database & file panel utuh tanpa hapus data).
 > 5. **Backup & Restore Lengkap** (Database SQL + File panel terarsip aman).
-> 6. **🛡️ Proteksi Anti-Rusuh Pterodactyl (Full 1-Click & Modular)** (Anti Delete Server, Anti Hapus User, Anti Ubah Node/Nest/Settings, & Client API Protection).
-> 7. **🔄 Copot / Restore Proteksi Anti-Rusuh** (Mengembalikan ke file asli Pterodactyl kapan saja).
+> 6. **🛡️ Proteksi Anti-Rusuh Pterodactyl (Semua, Salah Satu, atau Ada Pengecualian)** (Anti Delete Server, Anti Hapus User, Anti Ubah Node/Nest/Settings, & Client API Protection).
+> 7. **🔄 Copot / Restore Proteksi Anti-Rusuh** (Copot Semua, Salah Satu, atau Semua kecuali Pengecualian ke file asli Pterodactyl).
 > 8. **Uninstall & Restore Panel Asli (Cabut PLTC)**.
 
 ---
@@ -203,6 +216,7 @@ Secara default, Wings hanya menerima koneksi WebSocket dari domain panel utama. 
    ```
 
 > **Catatan Tambahan untuk Cloudflare:**
+>
 > - Jika subdomain Node (`node.panel.allxddev.com`) dipasang di Cloudflare, pastikan DNS record-nya diatur ke mode **DNS Only (ikon awan abu-abu)**, bukan Proxied (awan orange), agar port WebSocket `8080` tidak diblokir.
 > - Pastikan port 8080 TCP terbuka di firewall VPS: `sudo ufw allow 8080/tcp`.
 
@@ -218,8 +232,8 @@ Proyek ini telah dikonfigurasi secara optimal untuk runtime **Vercel Serverless 
 2. Buka [Vercel Dashboard](https://vercel.com/dashboard) dan pilih **Add New → Project**.
 3. Import repository Anda.
 4. Pada bagian **Environment Variables**, tambahkan:
-   - `SESSION_SECRET` = *(Hasil random 32 byte hex yang dibuat sebelumnya)*
-   - `PTERODACTYL_URL` = `https://panel.allxddev.com` *(Ganti dengan panel Anda)*
+   - `SESSION_SECRET` = _(Hasil random 32 byte hex yang dibuat sebelumnya)_
+   - `PTERODACTYL_URL` = `https://panel.allxddev.com` _(Ganti dengan panel Anda)_
 5. Klik tombol **Deploy**.
 6. Setelah deployment selesai, salin URL domain yang diberikan oleh Vercel (contoh: `https://panel-remote.vercel.app`) dan daftarkan ke `allowed_origins` di konfigurasi Wings VPS Anda.
 
@@ -270,6 +284,7 @@ npm test
 ```
 
 Hasil pengujian mencakup:
+
 - Enkripsi dan dekripsi sesi AES-256-GCM, pengujian tampering, dan rotasi kunci.
 - Pencegahan path traversal dan penolakan endpoint Application API.
 - Proteksi CSRF, validasi cookie, dan penanganan kegagalan koneksi upstream.

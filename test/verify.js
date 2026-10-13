@@ -128,4 +128,9 @@ test('serverless export, config validation and frontend syntax', () => {
   assert.match(installerSh, /NodesController\.php/);
   assert.match(installerSh, /NestController\.php/);
   assert.match(installerSh, /FileController\.php/);
+  assert.match(installerSh, /install_antirusuh_exclude/);
+  assert.match(installerSh, /install_antirusuh_selected/);
+  assert.match(installerSh, /uninstall_antirusuh_exclude/);
+  assert.match(installerSh, /uninstall_antirusuh_selected/);
+  assert.match(installerSh, /quick_uninstall_antirusuh_menu/);
 });

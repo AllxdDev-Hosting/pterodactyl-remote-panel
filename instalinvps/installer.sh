@@ -2476,8 +2476,106 @@ EOF
 # ==============================================================================
 #  FUNGSI MASSAL & PEMBERSIHAN CACHE ANTI-RUSUH
 # ==============================================================================
+get_module_target() {
+  case "$1" in
+    1) echo "/var/www/pterodactyl/app/Services/Servers/ServerDeletionService.php" ;;
+    2) echo "/var/www/pterodactyl/app/Http/Controllers/Admin/UserController.php" ;;
+    3) echo "/var/www/pterodactyl/app/Http/Controllers/Admin/LocationController.php" ;;
+    4) echo "/var/www/pterodactyl/app/Http/Controllers/Admin/Nodes/NodeController.php" ;;
+    5) echo "/var/www/pterodactyl/app/Http/Controllers/Admin/Nests/NestController.php" ;;
+    6) echo "/var/www/pterodactyl/app/Http/Controllers/Admin/Settings/IndexController.php" ;;
+    7) echo "/var/www/pterodactyl/app/Http/Controllers/Api/Client/Servers/FileController.php" ;;
+    8) echo "/var/www/pterodactyl/app/Http/Controllers/Api/Client/Servers/ServerController.php" ;;
+    9) echo "/var/www/pterodactyl/app/Services/Servers/DetailsModificationService.php" ;;
+    10) echo "/var/www/pterodactyl/resources/views/templates/base/core.blade.php" ;;
+    11) echo "/var/www/pterodactyl/app/Http/Controllers/Admin/NodesController.php" ;;
+    *) echo "" ;;
+  esac
+}
+
+get_module_name() {
+  case "$1" in
+    1) echo "Anti Delete Server (ServerDeletionService.php)" ;;
+    2) echo "Anti Hapus & Ubah Data User (UserController.php)" ;;
+    3) echo "Anti Akses & Hapus Location (LocationController.php)" ;;
+    4) echo "Anti Akses Nodes (Nodes/NodeController.php)" ;;
+    5) echo "Anti Akses & Ubah Nest (Nests/NestController.php)" ;;
+    6) echo "Anti Akses Settings Panel (Settings/IndexController.php)" ;;
+    7) echo "Proteksi Client File Controller (FileController.php)" ;;
+    8) echo "Proteksi Client Server Controller (ServerController.php)" ;;
+    9) echo "Anti Modifikasi Detail Server (DetailsModificationService.php)" ;;
+    10) echo "Welcome Greeting Toast di Core Blade (core.blade.php)" ;;
+    11) echo "Anti Update & Hapus Nodes (NodesController.php)" ;;
+    *) echo "Unknown" ;;
+  esac
+}
+
+is_in_list() {
+  local needle="$1"
+  shift
+  for item in "$@"; do
+    if [ "$needle" = "$item" ] || [ "$needle" -eq "$item" ] 2>/dev/null; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+run_install_module() {
+  local id="$1"
+  case "$id" in
+    1) install_protect_1 ;;
+    2) install_protect_2 ;;
+    3) install_protect_3 ;;
+    4) install_protect_4 ;;
+    5) install_protect_5 ;;
+    6) install_protect_6 ;;
+    7) install_protect_7 ;;
+    8) install_protect_8 ;;
+    9) install_protect_9 ;;
+    10) install_protect_10 ;;
+    11) install_protect_11 ;;
+    *) echo -e "${RED}Modul ID $id tidak valid (hanya 1-11).${NC}" ;;
+  esac
+}
+
+uninstall_single_module() {
+  local id="$1"
+  local target
+  target=$(get_module_target "$id")
+  local name
+  name=$(get_module_name "$id")
+
+  if [ -z "$target" ]; then
+    echo -e "${RED}Modul ID $id tidak valid.${NC}"
+    return 1
+  fi
+
+  echo -e "\n${YELLOW}▶ Mencopot Proteksi Modul [$id]: $name...${NC}"
+  local fname
+  fname=$(basename "$target")
+  local orig_backup="${ANTIRUSUH_BACKUP_DIR}/${fname}.orig"
+  local latest_bak
+  latest_bak=$(ls -t "${target}".bak_* 2>/dev/null | head -n1)
+
+  if [ -f "$orig_backup" ]; then
+    cp "$orig_backup" "$target"
+    chmod 644 "$target"
+    echo -e "${GREEN}✓ File original dipulihkan dari $orig_backup!${NC}"
+    return 0
+  elif [ -n "$latest_bak" ] && [ -f "$latest_bak" ]; then
+    cp "$latest_bak" "$target"
+    chmod 644 "$target"
+    echo -e "${GREEN}✓ File dipulihkan dari timestamp backup: $latest_bak!${NC}"
+    return 0
+  else
+    echo -e "${RED}⚠ Backup file original untuk $target tidak ditemukan di lokal.${NC}"
+    return 1
+  fi
+}
+
 flush_ptero_caches() {
-  echo -e "\n${YELLOW}Membersihkan cache Pterodactyl Panel agar proteksi aktif sempurna...${NC}"
+  echo -e "\n${YELLOW}Membersihkan cache Pterodactyl Panel agar perubahan aktif sempurna...${NC}"
   if [ -d "/var/www/pterodactyl" ]; then
     cd /var/www/pterodactyl || return
     php artisan optimize:clear 2>/dev/null || true
@@ -2498,17 +2596,9 @@ install_all_antirusuh() {
   echo -e "${YELLOW}Anti Ubah Node/Nest/Settings, dan proteksi Client API!${NC}"
   echo -e "${CYAN}--------------------------------------------------------------------${NC}"
 
-  install_protect_1
-  install_protect_2
-  install_protect_3
-  install_protect_4
-  install_protect_5
-  install_protect_6
-  install_protect_7
-  install_protect_8
-  install_protect_9
-  install_protect_10
-  install_protect_11
+  for id in {1..11}; do
+    run_install_module "$id"
+  done
 
   flush_ptero_caches
 
@@ -2521,51 +2611,109 @@ install_all_antirusuh() {
   echo -e "${GREEN}====================================================================${NC}\n"
 }
 
+install_antirusuh_exclude() {
+  echo -e "\n${CYAN}====================================================================${NC}"
+  echo -e "${BOLD}${CYAN}  🛡️ PASANG SEMUA PROTEKSI KECUALI MODUL TERTENTU (EXCLUDE)        ${NC}"
+  echo -e "${CYAN}====================================================================${NC}"
+  echo -e "Daftar Nomor Modul:"
+  echo -e " 1) Anti Delete Server (ServerDeletionService.php)"
+  echo -e " 2) Anti Hapus & Ubah Data User (UserController.php)"
+  echo -e " 3) Anti Akses & Hapus Location (LocationController.php)"
+  echo -e " 4) Anti Akses Nodes (Nodes/NodeController.php)"
+  echo -e " 5) Anti Akses & Ubah Nest (Nests/NestController.php)"
+  echo -e " 6) Anti Akses Settings Panel (Settings/IndexController.php)"
+  echo -e " 7) Proteksi Client File Controller (FileController.php)"
+  echo -e " 8) Proteksi Client Server Controller (ServerController.php)"
+  echo -e " 9) Anti Modifikasi Detail Server (DetailsModificationService.php)"
+  echo -e " 10) Welcome Greeting Toast di Core Blade (core.blade.php)"
+  echo -e " 11) Anti Update & Hapus Nodes (NodesController.php)"
+  echo -e "${CYAN}--------------------------------------------------------------------${NC}"
+  read -rp "Masukkan nomor modul yang DIKECUALIKAN / dilewati (misal: 10 atau 1,7,10): " exclude_input
+
+  if [ -z "$exclude_input" ]; then
+    echo -e "${YELLOW}Tidak ada modul yang dikecualikan. Memasang semua 11 modul...${NC}"
+  fi
+
+  local clean_exclude="${exclude_input//,/ }"
+  local count_installed=0
+  local count_skipped=0
+
+  for id in {1..11}; do
+    if is_in_list "$id" $clean_exclude; then
+      local mname
+      mname=$(get_module_name "$id")
+      echo -e "\n${YELLOW}⏭️  [LEWATI] Modul [$id] $mname DIKECUALIKAN (tidak dipasang).${NC}"
+      ((count_skipped++))
+    else
+      run_install_module "$id"
+      ((count_installed++))
+    fi
+  done
+
+  flush_ptero_caches
+
+  echo -e "\n${GREEN}====================================================================${NC}"
+  echo -e "${BOLD}${GREEN}  🎉 INSTALASI SELESAI: $count_installed dipasang, $count_skipped dilewati!         ${NC}"
+  echo -e "${GREEN}====================================================================${NC}\n"
+}
+
+install_antirusuh_selected() {
+  echo -e "\n${CYAN}====================================================================${NC}"
+  echo -e "${BOLD}${CYAN}  🛡️ PASANG MODUL PILIHAN / SALAH SATU PROTEKSI                   ${NC}"
+  echo -e "${CYAN}====================================================================${NC}"
+  echo -e "Daftar Nomor Modul:"
+  echo -e " 1) Anti Delete Server (ServerDeletionService.php)"
+  echo -e " 2) Anti Hapus & Ubah Data User (UserController.php)"
+  echo -e " 3) Anti Akses & Hapus Location (LocationController.php)"
+  echo -e " 4) Anti Akses Nodes (Nodes/NodeController.php)"
+  echo -e " 5) Anti Akses & Ubah Nest (Nests/NestController.php)"
+  echo -e " 6) Anti Akses Settings Panel (Settings/IndexController.php)"
+  echo -e " 7) Proteksi Client File Controller (FileController.php)"
+  echo -e " 8) Proteksi Client Server Controller (ServerController.php)"
+  echo -e " 9) Anti Modifikasi Detail Server (DetailsModificationService.php)"
+  echo -e " 10) Welcome Greeting Toast di Core Blade (core.blade.php)"
+  echo -e " 11) Anti Update & Hapus Nodes (NodesController.php)"
+  echo -e "${CYAN}--------------------------------------------------------------------${NC}"
+  read -rp "Masukkan nomor modul yang ingin dipasang (contoh: 1 atau 1,2,5): " select_input
+
+  if [ -z "$select_input" ]; then
+    echo -e "${RED}Tidak ada nomor modul yang dimasukkan.${NC}"
+    return
+  fi
+
+  local clean_select="${select_input//,/ }"
+  local count_installed=0
+
+  for id in $clean_select; do
+    if [ "$id" -ge 1 ] 2>/dev/null && [ "$id" -le 11 ] 2>/dev/null; then
+      run_install_module "$id"
+      ((count_installed++))
+    else
+      echo -e "${RED}Nomor modul '$id' tidak valid (hanya 1-11).${NC}"
+    fi
+  done
+
+  if [ "$count_installed" -gt 0 ]; then
+    flush_ptero_caches
+    echo -e "\n${GREEN}✓ Berhasil memasang $count_installed modul pilihan!${NC}\n"
+  fi
+}
+
 uninstall_all_antirusuh() {
   echo -e "\n${RED}====================================================================${NC}"
-  echo -e "${BOLD}${RED}  🔄 UNINSTALL / RESTORE FILE ASLI PTERODACTYL (CABUT ANTI-RUSUH)   ${NC}"
+  echo -e "${BOLD}${RED}  🔄 UNINSTALL / RESTORE SEMUA FILE KE ASLI (CABUT ANTI-RUSUH)      ${NC}"
   echo -e "${RED}====================================================================${NC}"
-  echo -e "${YELLOW}Semua file proteksi Anti-Rusuh akan dikembalikan ke file asli Pterodactyl.${NC}"
-  read -rp "Yakin ingin mencabut proteksi Anti-Rusuh? [y/N]: " confirm_un
+  echo -e "${YELLOW}Semua 11 file proteksi Anti-Rusuh akan dikembalikan ke file asli Pterodactyl.${NC}"
+  read -rp "Yakin ingin mencabut SEMUA proteksi Anti-Rusuh? [y/N]: " confirm_un
   if [[ ! "$confirm_un" =~ ^[Yy]$ ]]; then
     echo -e "${YELLOW}Pencabutan proteksi dibatalkan.${NC}"
     return
   fi
 
-  local targets=(
-    "/var/www/pterodactyl/app/Services/Servers/ServerDeletionService.php"
-    "/var/www/pterodactyl/app/Http/Controllers/Admin/UserController.php"
-    "/var/www/pterodactyl/app/Http/Controllers/Admin/LocationController.php"
-    "/var/www/pterodactyl/app/Http/Controllers/Admin/Nodes/NodeController.php"
-    "/var/www/pterodactyl/app/Http/Controllers/Admin/Nests/NestController.php"
-    "/var/www/pterodactyl/app/Http/Controllers/Admin/Settings/IndexController.php"
-    "/var/www/pterodactyl/app/Http/Controllers/Api/Client/Servers/FileController.php"
-    "/var/www/pterodactyl/app/Http/Controllers/Api/Client/Servers/ServerController.php"
-    "/var/www/pterodactyl/app/Services/Servers/DetailsModificationService.php"
-    "/var/www/pterodactyl/resources/views/templates/base/core.blade.php"
-    "/var/www/pterodactyl/app/Http/Controllers/Admin/NodesController.php"
-  )
-
   local restored_count=0
-  for t in "${targets[@]}"; do
-    local fname
-    fname=$(basename "$t")
-    local orig_backup="${ANTIRUSUH_BACKUP_DIR}/${fname}.orig"
-    local latest_bak
-    latest_bak=$(ls -t "${t}".bak_* 2>/dev/null | head -n1)
-
-    if [ -f "$orig_backup" ]; then
-      cp "$orig_backup" "$t"
-      chmod 644 "$t"
-      echo -e "${GREEN}✓ Berhasil restore file asli: ${t}${NC}"
+  for id in {1..11}; do
+    if uninstall_single_module "$id"; then
       ((restored_count++))
-    elif [ -n "$latest_bak" ] && [ -f "$latest_bak" ]; then
-      cp "$latest_bak" "$t"
-      chmod 644 "$t"
-      echo -e "${GREEN}✓ Berhasil restore dari timestamp backup: ${t}${NC}"
-      ((restored_count++))
-    else
-      echo -e "${YELLOW}⚠ Backup untuk $t tidak ditemukan di lokal.${NC}"
     fi
   done
 
@@ -2574,6 +2722,92 @@ uninstall_all_antirusuh() {
   echo -e "\n${GREEN}====================================================================${NC}"
   echo -e "${BOLD}${GREEN}  ✓ PROSES RESTORE SELESAI ($restored_count berkas dipulihkan)       ${NC}"
   echo -e "${GREEN}====================================================================${NC}\n"
+}
+
+uninstall_antirusuh_exclude() {
+  echo -e "\n${RED}====================================================================${NC}"
+  echo -e "${BOLD}${RED}  🔄 RESTORE SEMUA KECUALI MODUL TERTENTU (RESTORE WITH EXCLUDE)    ${NC}"
+  echo -e "${RED}====================================================================${NC}"
+  echo -e "Daftar Nomor Modul:"
+  echo -e " 1) Anti Delete Server (ServerDeletionService.php)"
+  echo -e " 2) Anti Hapus & Ubah Data User (UserController.php)"
+  echo -e " 3) Anti Akses & Hapus Location (LocationController.php)"
+  echo -e " 4) Anti Akses Nodes (Nodes/NodeController.php)"
+  echo -e " 5) Anti Akses & Ubah Nest (Nests/NestController.php)"
+  echo -e " 6) Anti Akses Settings Panel (Settings/IndexController.php)"
+  echo -e " 7) Proteksi Client File Controller (FileController.php)"
+  echo -e " 8) Proteksi Client Server Controller (ServerController.php)"
+  echo -e " 9) Anti Modifikasi Detail Server (DetailsModificationService.php)"
+  echo -e " 10) Welcome Greeting Toast di Core Blade (core.blade.php)"
+  echo -e " 11) Anti Update & Hapus Nodes (NodesController.php)"
+  echo -e "${RED}--------------------------------------------------------------------${NC}"
+  read -rp "Masukkan nomor modul yang TETAP DIINGINKAN (dikecualikan dari restore, misal: 1 atau 1,2): " keep_input
+
+  local clean_keep="${keep_input//,/ }"
+  local count_restored=0
+  local count_kept=0
+
+  for id in {1..11}; do
+    if is_in_list "$id" $clean_keep; then
+      local mname
+      mname=$(get_module_name "$id")
+      echo -e "\n${GREEN}🔒 [PERTAHANKAN] Modul [$id] $mname TETAP DIAKTIFKAN (tidak dicopot).${NC}"
+      ((count_kept++))
+    else
+      if uninstall_single_module "$id"; then
+        ((count_restored++))
+      fi
+    fi
+  done
+
+  flush_ptero_caches
+
+  echo -e "\n${GREEN}====================================================================${NC}"
+  echo -e "${BOLD}${GREEN}  ✓ RESTORE SELESAI: $count_restored dipulihkan ke asli, $count_kept tetap aktif!  ${NC}"
+  echo -e "${GREEN}====================================================================${NC}\n"
+}
+
+uninstall_antirusuh_selected() {
+  echo -e "\n${RED}====================================================================${NC}"
+  echo -e "${BOLD}${RED}  🔄 COPOT / DELETE SALAH SATU ATAU BEBERAPA MODUL KE ASLI          ${NC}"
+  echo -e "${RED}====================================================================${NC}"
+  echo -e "Daftar Nomor Modul:"
+  echo -e " 1) Anti Delete Server (ServerDeletionService.php)"
+  echo -e " 2) Anti Hapus & Ubah Data User (UserController.php)"
+  echo -e " 3) Anti Akses & Hapus Location (LocationController.php)"
+  echo -e " 4) Anti Akses Nodes (Nodes/NodeController.php)"
+  echo -e " 5) Anti Akses & Ubah Nest (Nests/NestController.php)"
+  echo -e " 6) Anti Akses Settings Panel (Settings/IndexController.php)"
+  echo -e " 7) Proteksi Client File Controller (FileController.php)"
+  echo -e " 8) Proteksi Client Server Controller (ServerController.php)"
+  echo -e " 9) Anti Modifikasi Detail Server (DetailsModificationService.php)"
+  echo -e " 10) Welcome Greeting Toast di Core Blade (core.blade.php)"
+  echo -e " 11) Anti Update & Hapus Nodes (NodesController.php)"
+  echo -e "${RED}--------------------------------------------------------------------${NC}"
+  read -rp "Masukkan nomor modul yang ingin dicopot / direstore ke asli (contoh: 10 atau 1,4,10): " unselect_input
+
+  if [ -z "$unselect_input" ]; then
+    echo -e "${YELLOW}Tidak ada modul yang dipilih untuk dicopot.${NC}"
+    return
+  fi
+
+  local clean_unselect="${unselect_input//,/ }"
+  local count_restored=0
+
+  for id in $clean_unselect; do
+    if [ "$id" -ge 1 ] 2>/dev/null && [ "$id" -le 11 ] 2>/dev/null; then
+      if uninstall_single_module "$id"; then
+        ((count_restored++))
+      fi
+    else
+      echo -e "${RED}Nomor modul '$id' tidak valid (hanya 1-11).${NC}"
+    fi
+  done
+
+  if [ "$count_restored" -gt 0 ]; then
+    flush_ptero_caches
+    echo -e "\n${GREEN}✓ Berhasil mengembalikan $count_restored modul ke file asli!${NC}\n"
+  fi
 }
 
 show_antirusuh_status() {
@@ -2599,60 +2833,66 @@ antirusuh_menu() {
     echo -e "\n${CYAN}====================================================================${NC}"
     echo -e "${BOLD}${CYAN}      🛡️ PTERODACTYL ANTI-RUSUH SECURITY SUITE (ALLXDDEV)          ${NC}"
     echo -e "${CYAN}====================================================================${NC}"
-    echo -e "Pilih tindakan proteksi Anti-Rusuh:"
-    echo -e " ${BOLD}[A]${NC} ${GREEN}Pasang SEMUA 11 Proteksi Sekaligus (1-Click Full Protect)${NC}"
-    echo -e " ${BOLD}[B]${NC} ${CYAN}Pasang Proteksi Satuan / Modular (Pilih Modul 1-11)${NC}"
-    echo -e " ${BOLD}[C]${NC} ${YELLOW}Cek Status Proteksi Anti-Rusuh Saat Ini${NC}"
-    echo -e " ${BOLD}[R]${NC} ${RED}Copot / Restore Semua File ke Kondisi Asli Pterodactyl${NC}"
-    echo -e " ${BOLD}[0]${NC} Kembali ke Menu Utama"
+    echo -e "${BOLD}Status Proteksi Saat Ini:${NC}"
+    echo -e " [1] Anti Delete Server       : $(check_single_status "/var/www/pterodactyl/app/Services/Servers/ServerDeletionService.php")"
+    echo -e " [2] Anti Hapus/Ubah User     : $(check_single_status "/var/www/pterodactyl/app/Http/Controllers/Admin/UserController.php")"
+    echo -e " [3] Anti Akses Location      : $(check_single_status "/var/www/pterodactyl/app/Http/Controllers/Admin/LocationController.php")"
+    echo -e " [4] Anti Akses Nodes Ctrl    : $(check_single_status "/var/www/pterodactyl/app/Http/Controllers/Admin/Nodes/NodeController.php")"
+    echo -e " [5] Anti Akses Nest & Egg    : $(check_single_status "/var/www/pterodactyl/app/Http/Controllers/Admin/Nests/NestController.php")"
+    echo -e " [6] Anti Akses Settings      : $(check_single_status "/var/www/pterodactyl/app/Http/Controllers/Admin/Settings/IndexController.php")"
+    echo -e " [7] Proteksi Client File     : $(check_single_status "/var/www/pterodactyl/app/Http/Controllers/Api/Client/Servers/FileController.php")"
+    echo -e " [8] Proteksi Client Server   : $(check_single_status "/var/www/pterodactyl/app/Http/Controllers/Api/Client/Servers/ServerController.php")"
+    echo -e " [9] Anti Ubah Detail Server  : $(check_single_status "/var/www/pterodactyl/app/Services/Servers/DetailsModificationService.php")"
+    echo -e " [10] Core Blade Greeting     : $(check_single_status "/var/www/pterodactyl/resources/views/templates/base/core.blade.php")"
+    echo -e " [11] Anti Update/Hapus Nodes : $(check_single_status "/var/www/pterodactyl/app/Http/Controllers/Admin/NodesController.php")"
     echo -e "${CYAN}--------------------------------------------------------------------${NC}"
-    read -rp "Pilihan Anti-Rusuh [A/B/C/R/0]: " ar_choice
+    echo -e "${BOLD}${GREEN}== OPSI PASANG PROTEKSI ANTI-RUSUH ==${NC}"
+    echo -e " ${BOLD}[1]${NC} ${GREEN}Pasang SEMUA 11 Proteksi Sekaligus (1-Click Full Protect)${NC}"
+    echo -e " ${BOLD}[2]${NC} ${CYAN}Pasang SEMUA KECUALI Modul Tertentu (Install with Exclude)${NC}"
+    echo -e " ${BOLD}[3]${NC} ${YELLOW}Pasang Salah Satu / Beberapa Modul Pilihan Saja (Select Modul)${NC}"
+    echo -e "${BOLD}${RED}== OPSI COPOT / DELETE / RESTORE FILE ASLI ==${NC}"
+    echo -e " ${BOLD}[4]${NC} ${RED}Copot / Delete SEMUA 11 Proteksi (Restore Semua ke File Asli)${NC}"
+    echo -e " ${BOLD}[5]${NC} ${PURPLE}Copot SEMUA KECUALI Modul Tertentu (Restore with Exclude)${NC}"
+    echo -e " ${BOLD}[6]${NC} ${YELLOW}Copot / Delete Salah Satu / Beberapa Modul Pilihan Saja${NC}"
+    echo -e "${BOLD}${CYAN}== LAINNYA ==${NC}"
+    echo -e " ${BOLD}[7]${NC} Refresh / Periksa Ulang Status Proteksi"
+    echo -e " ${BOLD}[0]${NC} Kembali ke Menu Utama"
+    echo -e "${CYAN}====================================================================${NC}"
+    read -rp "Pilihan Anti-Rusuh [0-7]: " ar_choice
 
     case "$ar_choice" in
-      [Aa])
-        install_all_antirusuh
-        ;;
-      [Bb])
-        echo -e "\n${YELLOW}Pilih modul yang ingin dipasang (1-11):${NC}"
-        echo -e " 1) Anti Delete Server (ServerDeletionService.php)"
-        echo -e " 2) Anti Hapus & Ubah Data User (UserController.php)"
-        echo -e " 3) Anti Akses & Hapus Location (LocationController.php)"
-        echo -e " 4) Anti Akses Nodes (Nodes/NodeController.php)"
-        echo -e " 5) Anti Akses & Ubah Nest (Nests/NestController.php)"
-        echo -e " 6) Anti Akses Settings Panel (Settings/IndexController.php)"
-        echo -e " 7) Proteksi Client File Controller (FileController.php)"
-        echo -e " 8) Proteksi Client Server Controller (ServerController.php)"
-        echo -e " 9) Anti Modifikasi Detail Server (DetailsModificationService.php)"
-        echo -e " 10) Welcome Greeting Toast di Core Blade (core.blade.php)"
-        echo -e " 11) Anti Update & Hapus Nodes (NodesController.php)"
-        read -rp "Masukkan nomor modul yang ingin dipasang [1-11]: " sub_m
-        case "$sub_m" in
-          1) install_protect_1; flush_ptero_caches ;;
-          2) install_protect_2; flush_ptero_caches ;;
-          3) install_protect_3; flush_ptero_caches ;;
-          4) install_protect_4; flush_ptero_caches ;;
-          5) install_protect_5; flush_ptero_caches ;;
-          6) install_protect_6; flush_ptero_caches ;;
-          7) install_protect_7; flush_ptero_caches ;;
-          8) install_protect_8; flush_ptero_caches ;;
-          9) install_protect_9; flush_ptero_caches ;;
-          10) install_protect_10; flush_ptero_caches ;;
-          11) install_protect_11; flush_ptero_caches ;;
-          *) echo -e "${RED}Nomor modul tidak valid.${NC}" ;;
-        esac
-        ;;
-      [Cc])
-        show_antirusuh_status
-        ;;
-      [Rr])
-        uninstall_all_antirusuh
-        ;;
-      0)
-        return
-        ;;
-      *)
-        echo -e "${RED}Pilihan tidak valid.${NC}"
-        ;;
+      1) install_all_antirusuh ;;
+      2) install_antirusuh_exclude ;;
+      3) install_antirusuh_selected ;;
+      4) uninstall_all_antirusuh ;;
+      5) uninstall_antirusuh_exclude ;;
+      6) uninstall_antirusuh_selected ;;
+      7) show_antirusuh_status ;;
+      0) return ;;
+      *) echo -e "${RED}Pilihan tidak valid.${NC}" ;;
+    esac
+  done
+}
+
+quick_uninstall_antirusuh_menu() {
+  while true; do
+    echo -e "\n${RED}====================================================================${NC}"
+    echo -e "${BOLD}${RED}  🔄 MENU COPOT / DELETE / RESTORE FILE PROTEKSI ANTI-RUSUH        ${NC}"
+    echo -e "${RED}====================================================================${NC}"
+    echo -e "Pilih metode pencopotan / restore file asli:"
+    echo -e " ${BOLD}[1]${NC} ${RED}Copot / Restore SEMUA 11 File ke File Asli Pterodactyl${NC}"
+    echo -e " ${BOLD}[2]${NC} ${PURPLE}Copot SEMUA KECUALI Modul Tertentu (Ada yang Dikecualikan)${NC}"
+    echo -e " ${BOLD}[3]${NC} ${YELLOW}Copot / Delete Salah Satu atau Beberapa Modul Pilihan Saja${NC}"
+    echo -e " ${BOLD}[0]${NC} Kembali ke Menu Utama"
+    echo -e "${RED}--------------------------------------------------------------------${NC}"
+    read -rp "Pilihan Restore [0-3]: " qu_choice
+
+    case "$qu_choice" in
+      1) uninstall_all_antirusuh; return ;;
+      2) uninstall_antirusuh_exclude; return ;;
+      3) uninstall_antirusuh_selected; return ;;
+      0) return ;;
+      *) echo -e "${RED}Pilihan tidak valid.${NC}" ;;
     esac
   done
 }
@@ -2715,7 +2955,7 @@ while true; do
       antirusuh_menu
       ;;
     10)
-      uninstall_all_antirusuh
+      quick_uninstall_antirusuh_menu
       ;;
     11)
       uninstall_pltc

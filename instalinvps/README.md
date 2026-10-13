@@ -9,11 +9,13 @@ Folder ini berisi skrip otomatis untuk **Pterodactyl Panel** dan **Remote Client
 Cukup salin dan tempel salah satu baris perintah berikut di terminal SSH VPS Pterodactyl Anda:
 
 ### 🔹 Pilihan 1: Via Raw GitHub (Rekomendasi Utama)
+
 ```bash
 bash <(curl -sSL https://raw.githubusercontent.com/AllxdDev-Hosting/pterodactyl-remote-panel/main/instalinvps/installer.sh)
 ```
 
 Atau jika menggunakan pipe langsung:
+
 ```bash
 curl -sSL https://raw.githubusercontent.com/AllxdDev-Hosting/pterodactyl-remote-panel/main/instalinvps/installer.sh | bash
 ```
@@ -21,7 +23,9 @@ curl -sSL https://raw.githubusercontent.com/AllxdDev-Hosting/pterodactyl-remote-
 ---
 
 ### 🔹 Pilihan 2: Via Domain Panel Anda Sendiri (Jika Panel Remote Sudah Aktif)
+
 Panel Remote AllxdDev ini sudah otomatis menyediakan endpoint skrip bash:
+
 ```bash
 bash <(curl -sSL https://domain-panel-anda.com/installer.sh)
 ```
@@ -31,6 +35,7 @@ bash <(curl -sSL https://domain-panel-anda.com/installer.sh)
 ## 🔑 Lisensi Installer
 
 Saat menjalankan `installer.sh`, Anda akan diminta memasukkan License Key:
+
 ```text
 AllxdClint
 ```
@@ -42,7 +47,7 @@ AllxdClint
 Semua fitur berikut tergabung dalam **1 URL / 1 Script** tanpa perlu install terpisah:
 
 1. **📦 Pasang / Install Fitur PLTC ke Pterodactyl Panel**:
-   - Memasang tombol mengambang (*floating button*) **`🔑 Salin PLTC`** dan dialog modal modern langsung di dashboard Pterodactyl pengguna (`resources/views/templates/base.blade.php`).
+   - Memasang tombol mengambang (_floating button_) **`🔑 Salin PLTC`** dan dialog modal modern langsung di dashboard Pterodactyl pengguna (`resources/views/templates/base.blade.php`).
    - Menyediakan endpoint otomatis `/allxd/pltc-action` untuk mengambil dan men-generate Client API Key tanpa ribet.
    - Fitur **1-Click Copy** untuk langsung menyalin token ke clipboard.
    - Pilihan **🔄 Buat Kunci Baru** untuk me-refresh API Key secara instan.
@@ -77,8 +82,16 @@ Semua fitur berikut tergabung dalam **1 URL / 1 Script** tanpa perlu install ter
 9. **♻️ Restore Panel dari Backup**:
    - Memulihkan panel secara utuh dari file lokal maupun tautan URL download.
 
-10. **�️ Proteksi Anti-Rusuh Pterodactyl (Integrasi AllxdDev-Hosting/antirusuh)**:
-   - **1-Click Full Protect (Semua 11 Modul Sekaligus)** atau **Modular (Pilih Satuan)**:
+10. **🛡️ Proteksi Anti-Rusuh Pterodactyl (Fleksibel & Granular)**:
+   - **Fitur Pasang Proteksi**:
+     - **Pasang SEMUA 11 Modul Sekaligus**: 1-Click instalasi proteksi menyeluruh.
+     - **Pasang SEMUA KECUALI Modul Tertentu**: Pasang seluruh proteksi namun dapat mengecualikan modul tertentu yang tidak diinginkan (contoh: kecualikan modul 10 greeting toast).
+     - **Pasang Salah Satu / Beberapa Modul Pilihan**: Pilih secara spesifik hanya modul yang ingin dipasang (contoh: hanya modul 1 dan 2).
+   - **Fitur Copot / Delete / Restore ke File Asli**:
+     - **Copot SEMUA Proteksi**: Kembalikan seluruh 11 berkas panel ke file asli Pterodactyl.
+     - **Copot SEMUA KECUALI Modul Tertentu**: Restore seluruh file ke asli namun modul tertentu tetap dipertahankan terpasang.
+     - **Copot Salah Satu / Pilihan Tertentu Saja**: Hapus proteksi pada modul tertentu saja tanpa menyentuh modul lainnya.
+   - **11 Modul Proteksi**:
      - **Modul 1**: Anti Delete Server (`ServerDeletionService.php`) — Mengunci penghapusan server hanya untuk Admin User ID 1.
      - **Modul 2**: Anti Hapus & Ubah Data User (`UserController.php`) — Mencegah hacker/admin nakal mengubah email, password, root admin, atau menghapus user.
      - **Modul 3**: Anti Akses & Hapus Location (`LocationController.php`) — Melindungi lokasi node dari intipan & penghapusan.
@@ -90,8 +103,8 @@ Semua fitur berikut tergabung dalam **1 URL / 1 Script** tanpa perlu install ter
      - **Modul 10**: Floating Welcome Notification (`core.blade.php`) — Notifikasi sambutan modern di dashboard.
    - Dilengkapi sistem auto-backup ke `/var/ptero_antirusuh_backups/` dan pembersihan cache otomatis (`artisan optimize:clear`).
 
-11. **🔄 Copot / Restore File Proteksi Anti-Rusuh**:
-   - Mengembalikan seluruh berkas proteksi ke file asli Pterodactyl secara bersih tanpa merusak data panel.
+11. **🔄 Menu Cepat Copot / Restore Proteksi Anti-Rusuh**:
+   - Menu akses cepat untuk merestore proteksi (Semua, dengan Pengecualian, atau Modul Pilihan) langsung ke file asli Pterodactyl.
 
 12. **🗑️ Uninstall / Restore Panel Asli (Cabut PLTC)**:
    - Menghapus seluruh modifikasi PLTC dan mengembalikan file Blade serta Route Pterodactyl ke kondisi semula secara bersih.
@@ -126,7 +139,9 @@ Semua fitur berikut tergabung dalam **1 URL / 1 Script** tanpa perlu install ter
 ## 🌐 Menjalankan Remote Client Panel Standalone di VPS
 
 Jika Anda juga ingin memasang **Remote Client Panel** (Node.js Express) di VPS yang sama atau terpisah:
+
 ```bash
 sudo ./install.sh
 ```
+
 Pilih opsi `[2]` untuk menginstal runtime Node.js 24, Systemd Service, Nginx Reverse Proxy, dan SSL Certbot secara otomatis.
